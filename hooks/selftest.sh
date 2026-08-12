@@ -232,6 +232,47 @@ case_no_verdict() {
   rm -rf "$t"
 }
 
+case_install_fresh() {
+  local t
+  t=$(mktemp -d)
+  HOME="$t" bash "$HOOKS/install.sh" >/dev/null 2>&1
+  local stop post
+  stop=$(jq -r '[.hooks.Stop[].hooks[].command] | index("bash ~/.claude/hooks/codex-review.sh")' "$t/.claude/settings.json" 2>/dev/null)
+  post=$(jq -r '[.hooks.PostToolUse[].hooks[].command] | index("bash ~/.claude/hooks/record-edit.sh")' "$t/.claude/settings.json" 2>/dev/null)
+  if [ -L "$t/.claude/skills/target" ] && [ -L "$t/.claude/hooks/codex-review.sh" ] &&
+    [ "$stop" != null ] && [ "$post" != null ]; then
+    ok "install links the files and wires both hooks"
+  else
+    bad "install links the files and wires both hooks" "stop=$stop post=$post"
+  fi
+  rm -rf "$t"
+}
+
+case_install_idempotent() {
+  local t
+  t=$(mktemp -d)
+  mkdir -p "$t/.claude"
+  printf '{"model":"opus","hooks":{"Stop":[{"hooks":[{"type":"command","command":"echo mine"}]}]}}\n' \
+    >"$t/.claude/settings.json"
+  HOME="$t" bash "$HOOKS/install.sh" >/dev/null 2>&1
+  local after
+  after=$(jq -S . "$t/.claude/settings.json")
+  HOME="$t" bash "$HOOKS/install.sh" >/dev/null 2>&1
+  local model mine
+  model=$(jq -r .model "$t/.claude/settings.json")
+  mine=$(jq -r '[.hooks.Stop[].hooks[].command] | index("echo mine")' "$t/.claude/settings.json")
+  if [ "$after" = "$(jq -S . "$t/.claude/settings.json")" ] && [ "$model" = opus ] && [ "$mine" != null ]; then
+    ok "install is idempotent and keeps existing settings"
+  else
+    bad "install is idempotent and keeps existing settings" "model=$model existing-hook=$mine or second run mutated the file"
+  fi
+  rm -rf "$t"
+}
+
+echo "install"
+case_install_fresh
+case_install_idempotent
+
 echo "git repo"
 case_approve
 case_reject

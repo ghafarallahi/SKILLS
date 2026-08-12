@@ -13,7 +13,8 @@ or not anyone remembers them:
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
-| [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for both hooks. Stub `codex`, throwaway repos, no network. |
+| [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for the hooks and the installer. Stub `codex`, throwaway repos, no network. |
+| [`hooks/install.sh`](hooks/install.sh) | Idempotent installer — symlinks, plus a non-destructive merge into `settings.json`. |
 
 ## How the hook behaves
 
@@ -50,6 +51,18 @@ The repo is canonical; `~/.claude` holds symlinks to it.
 
 ```bash
 git clone https://github.com/rekopad/SKILLS.git ~/MyProject/SKILLS
+bash ~/MyProject/SKILLS/hooks/install.sh
+```
+
+[`install.sh`](hooks/install.sh) makes the symlinks and merges both hook entries into
+`~/.claude/settings.json`, leaving everything else in that file alone. It's idempotent, it
+refuses to overwrite anything that isn't already a symlink of its own, and it backs the
+settings file up before touching it. Restart Claude Code afterwards.
+
+<details>
+<summary>Doing it by hand instead</summary>
+
+```bash
 ln -s ~/MyProject/SKILLS/skills/codex-check ~/.claude/skills/codex-check
 ln -s ~/MyProject/SKILLS/skills/target ~/.claude/skills/target
 ln -s ~/MyProject/SKILLS/hooks/codex-review.sh ~/.claude/hooks/codex-review.sh
@@ -85,6 +98,8 @@ Then wire both hooks up in `~/.claude/settings.json`:
 }
 ```
 
+</details>
+
 Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and `git`.
 
 ## Verifying it
@@ -93,12 +108,15 @@ Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and 
 bash hooks/selftest.sh
 ```
 
-Ten cases over both hooks — approve, reject, clean tree, the block cap, path recording, the
-non-git fallback, cap rollover, and both fail-open paths. It stubs `codex` and gives every
-case its own `TMPDIR`, so it's deterministic, offline, and costs nothing. Non-zero exit if
-anything fails.
+Twelve cases — install and idempotent re-install, approve, reject, clean tree, the block
+cap, path recording, the non-git fallback, cap rollover, and both fail-open paths. It stubs
+`codex` and gives every case its own `TMPDIR` and `HOME`, so it's deterministic, offline,
+and costs nothing. Non-zero exit if anything fails.
 
 ```
+install
+  ok   install links the files and wires both hooks
+  ok   install is idempotent and keeps existing settings
 git repo
   ok   approve is silent
   ok   reject blocks the turn
