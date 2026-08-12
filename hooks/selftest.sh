@@ -269,9 +269,44 @@ case_install_idempotent() {
   rm -rf "$t"
 }
 
+case_install_skip_is_loud() {
+  local t
+  t=$(mktemp -d)
+  mkdir -p "$t/.claude/skills/target" # a real directory in the way, not our symlink
+  local out rc
+  out=$(HOME="$t" bash "$HOOKS/install.sh" 2>&1)
+  rc=$?
+  if [ "$rc" -ne 0 ] && [ ! -L "$t/.claude/skills/target" ] &&
+    printf '%s' "$out" | grep -q INCOMPLETE; then
+    ok "a skipped link fails loudly instead of reporting success"
+  else
+    bad "a skipped link fails loudly instead of reporting success" \
+      "exit=$rc, last line: $(printf '%s' "$out" | tail -1)"
+  fi
+  rm -rf "$t"
+}
+
+case_install_empty_skills() {
+  local t r
+  t=$(mktemp -d)
+  r=$(mktemp -d)
+  mkdir -p "$r/skills" "$r/hooks"
+  cp "$HOOKS/install.sh" "$r/hooks/"
+  touch "$r/hooks/codex-review.sh" "$r/hooks/record-edit.sh"
+  HOME="$t" bash "$r/hooks/install.sh" >/dev/null 2>&1
+  if [ -e "$t/.claude/skills/*" ] || [ -L "$t/.claude/skills/*" ]; then
+    bad "empty skills/ makes no dangling link" "created a symlink named '*'"
+  else
+    ok "empty skills/ makes no dangling link"
+  fi
+  rm -rf "$t" "$r"
+}
+
 echo "install"
 case_install_fresh
 case_install_idempotent
+case_install_skip_is_loud
+case_install_empty_skills
 
 echo "git repo"
 case_approve

@@ -14,6 +14,7 @@ SETTINGS="$CLAUDE/settings.json"
 REVIEW_CMD="bash ~/.claude/hooks/codex-review.sh"
 RECORD_CMD="bash ~/.claude/hooks/record-edit.sh"
 changed=0
+skipped=0
 
 for t in jq git; do
   command -v "$t" >/dev/null 2>&1 || {
@@ -50,10 +51,13 @@ mkdir -p "$CLAUDE/skills" "$CLAUDE/hooks"
 echo "symlinks"
 for skill in "$REPO"/skills/*/; do
   skill=${skill%/}
-  link "$skill" "$CLAUDE/skills/$(basename "$skill")"
+  # An unmatched glob comes through as the literal pattern; linking it would leave a
+  # dangling symlink named '*'.
+  [ -d "$skill" ] || continue
+  link "$skill" "$CLAUDE/skills/$(basename "$skill")" || skipped=1
 done
-link "$REPO/hooks/codex-review.sh" "$CLAUDE/hooks/codex-review.sh"
-link "$REPO/hooks/record-edit.sh" "$CLAUDE/hooks/record-edit.sh"
+link "$REPO/hooks/codex-review.sh" "$CLAUDE/hooks/codex-review.sh" || skipped=1
+link "$REPO/hooks/record-edit.sh" "$CLAUDE/hooks/record-edit.sh" || skipped=1
 
 # --- settings.json ----------------------------------------------------------
 
@@ -121,5 +125,16 @@ else
 fi
 
 echo
-[ "$changed" -eq 1 ] && echo "Installed. Restart Claude Code so it picks up the new settings." ||
+if [ "$skipped" -eq 1 ]; then
+  # Never report success over a skip: the whole point of the hook is that it's installed,
+  # and a green summary here would hide that it isn't.
+  echo "INCOMPLETE — the SKIP lines above were not installed. Nothing was overwritten;" >&2
+  echo "move or delete those paths and run this again." >&2
+  exit 1
+fi
+
+if [ "$changed" -eq 1 ]; then
+  echo "Installed. Restart Claude Code so it picks up the new settings."
+else
   echo "Nothing to do — already installed."
+fi
