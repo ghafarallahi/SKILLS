@@ -13,6 +13,7 @@ or not anyone remembers them:
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
+| [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for both hooks. Stub `codex`, throwaway repos, no network. |
 
 ## How the hook behaves
 
@@ -87,6 +88,25 @@ Then wire both hooks up in `~/.claude/settings.json`:
 Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and `git`.
 
 ## Verifying it
+
+```bash
+bash hooks/selftest.sh
+```
+
+Ten cases over both hooks — approve, reject, clean tree, the block cap, path recording, the
+non-git fallback, cap rollover, and both fail-open paths. It stubs `codex` and gives every
+case its own `TMPDIR`, so it's deterministic, offline, and costs nothing. Non-zero exit if
+anything fails.
+
+```
+git repo
+  ok   approve is silent
+  ok   reject blocks the turn
+  ...
+10 passed, 0 failed
+```
+
+### By hand
 
 The hook reads its working directory and session id from the JSON on stdin, so you can run
 it against any folder without waiting for a turn to end. Plant a defect, then:
