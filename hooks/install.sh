@@ -48,8 +48,10 @@ link() { # link <source> <destination>
 
 mkdir -p "$CLAUDE/skills" "$CLAUDE/hooks"
 echo "symlinks"
-link "$REPO/skills/codex-check" "$CLAUDE/skills/codex-check"
-link "$REPO/skills/target" "$CLAUDE/skills/target"
+for skill in "$REPO"/skills/*/; do
+  skill=${skill%/}
+  link "$skill" "$CLAUDE/skills/$(basename "$skill")"
+done
 link "$REPO/hooks/codex-review.sh" "$CLAUDE/hooks/codex-review.sh"
 link "$REPO/hooks/record-edit.sh" "$CLAUDE/hooks/record-edit.sh"
 
