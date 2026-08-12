@@ -3,6 +3,27 @@
 Claude Code customizations that make an independent model — OpenAI's Codex — confirm work
 before it's reported as done. Claude doesn't self-certify.
 
+## Quick start
+
+```bash
+npm install -g @openai/codex && codex login
+git clone https://github.com/rekopad/SKILLS.git ~/MyProject/SKILLS
+bash ~/MyProject/SKILLS/hooks/install.sh
+```
+
+Restart Claude Code. From then on every turn that leaves changed files gets reviewed before
+it can be called done — a rejection is fed back for a fix, not shown to you as a suggestion.
+
+```bash
+bash ~/MyProject/SKILLS/hooks/selftest.sh   # 12 cases, offline, confirms it all works
+```
+
+[`install.sh`](hooks/install.sh) is idempotent and non-destructive: it skips anything that
+already exists and isn't its own symlink, and merges into `settings.json` rather than
+replacing it. See [Install](#install) for what it touches and how to do it by hand.
+
+---
+
 Skills are advisory — they trigger on relevance. The hooks are enforcing — they run whether
 or not anyone remembers them:
 
@@ -47,17 +68,18 @@ costs a Codex run when there's something to look at.
 
 ## Install
 
-The repo is canonical; `~/.claude` holds symlinks to it.
+The repo is canonical; `~/.claude` holds symlinks to it. `install.sh` (see
+[Quick start](#quick-start)) creates four of them —
 
-```bash
-git clone https://github.com/rekopad/SKILLS.git ~/MyProject/SKILLS
-bash ~/MyProject/SKILLS/hooks/install.sh
+```
+~/.claude/skills/codex-check      ~/.claude/hooks/codex-review.sh
+~/.claude/skills/target           ~/.claude/hooks/record-edit.sh
 ```
 
-[`install.sh`](hooks/install.sh) makes the symlinks and merges both hook entries into
-`~/.claude/settings.json`, leaving everything else in that file alone. It's idempotent, it
-refuses to overwrite anything that isn't already a symlink of its own, and it backs the
-settings file up before touching it. Restart Claude Code afterwards.
+— and adds one `PostToolUse` and one `Stop` entry to `~/.claude/settings.json`, backing the
+file up to `settings.json.bak` first. Nothing else in that file is touched. It honors
+`$HOME`, so you can rehearse the whole thing against a scratch directory before running it
+for real.
 
 <details>
 <summary>Doing it by hand instead</summary>
