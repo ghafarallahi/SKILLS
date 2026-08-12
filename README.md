@@ -32,6 +32,7 @@ or not anyone remembers them:
 | [`skills/codex-check/SKILL.md`](skills/codex-check/SKILL.md) | A skill Claude follows when asked to verify work ("codex check this"). Advisory — it triggers on relevance. |
 | [`skills/target/SKILL.md`](skills/target/SKILL.md) | `/target <task>` — break the task down, ask everything up front, then run to the end without check-ins. |
 | [`skills/commit-message/SKILL.md`](skills/commit-message/SKILL.md) | Writes the message from the staged diff, not from intent — and never claims a test it didn't run. |
+| [`skills/review-changes/SKILL.md`](skills/review-changes/SKILL.md) | Reviews a diff by hand: severity-ranked, every finding refuted first, silence when it's clean. |
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
