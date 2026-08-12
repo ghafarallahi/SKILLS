@@ -3,11 +3,13 @@
 Claude Code customizations that make an independent model — OpenAI's Codex — confirm work
 before it's reported as done. Claude doesn't self-certify.
 
-Two pieces, one advisory and one enforcing:
+Skills are advisory — they trigger on relevance. The hooks are enforcing — they run whether
+or not anyone remembers them:
 
 | Path | What it is |
 |---|---|
 | [`skills/codex-check/SKILL.md`](skills/codex-check/SKILL.md) | A skill Claude follows when asked to verify work ("codex check this"). Advisory — it triggers on relevance. |
+| [`skills/target/SKILL.md`](skills/target/SKILL.md) | `/target <task>` — break the task down, ask everything up front, then run to the end without check-ins. |
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
@@ -48,6 +50,7 @@ The repo is canonical; `~/.claude` holds symlinks to it.
 ```bash
 git clone https://github.com/rekopad/SKILLS.git ~/MyProject/SKILLS
 ln -s ~/MyProject/SKILLS/skills/codex-check ~/.claude/skills/codex-check
+ln -s ~/MyProject/SKILLS/skills/target ~/.claude/skills/target
 ln -s ~/MyProject/SKILLS/hooks/codex-review.sh ~/.claude/hooks/codex-review.sh
 ln -s ~/MyProject/SKILLS/hooks/record-edit.sh ~/.claude/hooks/record-edit.sh
 ```
@@ -82,3 +85,32 @@ Then wire both hooks up in `~/.claude/settings.json`:
 ```
 
 Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and `git`.
+
+## Verifying it
+
+The hook reads its working directory and session id from the JSON on stdin, so you can run
+it against any folder without waiting for a turn to end. Plant a defect, then:
+
+```bash
+# in a git repo — reviews the diff
+echo '{"cwd":"/path/to/repo","session_id":"manual"}' | bash ~/.claude/hooks/codex-review.sh
+
+# in a plain folder — reviews the files listed for that session id
+S="${TMPDIR:-/tmp}/claude-codex-review"
+echo /path/to/folder/thing.py > "$S/manual.files"
+echo '{"cwd":"/path/to/folder","session_id":"manual"}' | bash ~/.claude/hooks/codex-review.sh
+```
+
+A rejection comes back as the JSON the hook feeds to Claude:
+
+```json
+{
+  "decision": "block",
+  "reason": "... After the final failed attempt, the function sleeps and implicitly
+             returns None, swallowing the exception ...\n\nCODEX_VERDICT: REJECT",
+  "systemMessage": "Codex rejected the changes — Claude is fixing them"
+}
+```
+
+Silence and exit 0 means approved. Use a throwaway `session_id` — the real one carries the
+block counter and the queued file list.
