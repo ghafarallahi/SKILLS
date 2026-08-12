@@ -302,7 +302,61 @@ case_install_empty_skills() {
   rm -rf "$t" "$r"
 }
 
+case_install_backs_up() {
+  local t
+  t=$(mktemp -d)
+  mkdir -p "$t/.claude"
+  printf '{"model":"opus"}\n' >"$t/.claude/settings.json"
+  HOME="$t" bash "$HOOKS/install.sh" >/dev/null 2>&1
+  local backed
+  backed=$(jq -r '.model // "missing"' "$t/.claude/settings.json.bak" 2>/dev/null)
+  if [ "$backed" = opus ]; then
+    ok "the old settings.json is kept as .bak before it's rewritten"
+  else
+    bad "the old settings.json is kept as .bak before it's rewritten" \
+      "backup .model = $backed (want opus)"
+  fi
+  rm -rf "$t"
+}
+
+case_reset_rearms() {
+  local t
+  t=$(mktemp -d)
+  new_repo "$t/repo"
+  printf 'a = 2\n' >>"$t/repo/code.py"
+  stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
+  # burn both blocks, so the third run is capped and silent
+  run_hook "$REVIEW" "$t" "$t/repo" rearm "$t/bin:$PATH" >/dev/null
+  run_hook "$REVIEW" "$t" "$t/repo" rearm "$t/bin:$PATH" >/dev/null
+  local capped after
+  capped=$(run_hook "$REVIEW" "$t" "$t/repo" rearm "$t/bin:$PATH")
+  TMPDIR="$t" bash "$HOOKS/reset-count.sh" >/dev/null 2>&1
+  after=$(run_hook "$REVIEW" "$t" "$t/repo" rearm "$t/bin:$PATH")
+  if [ -z "$capped" ] && is_block "$after"; then
+    ok "reset-count re-arms a session that hit the block cap"
+  else
+    bad "reset-count re-arms a session that hit the block cap" \
+      "capped run='$capped' (want empty), run after reset blocked=$(is_block "$after" && echo yes || echo no)"
+  fi
+  rm -rf "$t"
+}
+
+case_record_ignores_pathless() {
+  local t
+  t=$(mktemp -d)
+  printf '{"session_id":"none","tool_input":{"content":"no path here"}}' |
+    TMPDIR="$t" bash "$RECORD"
+  if [ ! -s "$t/claude-codex-review/none.files" ]; then
+    ok "record-edit writes nothing when the payload has no file path"
+  else
+    bad "record-edit writes nothing when the payload has no file path" \
+      "recorded: $(cat "$t/claude-codex-review/none.files")"
+  fi
+  rm -rf "$t"
+}
+
 echo "install"
+case_install_backs_up
 case_install_fresh
 case_install_idempotent
 case_install_skip_is_loud
@@ -313,9 +367,11 @@ case_approve
 case_reject
 case_clean_tree
 case_block_cap
+case_reset_rearms
 
 echo "no git"
 case_record_edit
+case_record_ignores_pathless
 case_nongit_reject
 case_nongit_approve_clears
 case_cap_rollover
