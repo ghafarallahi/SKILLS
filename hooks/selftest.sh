@@ -64,6 +64,24 @@ new_repo() { # new_repo <dir>
   git -C "$1" commit -qm init
 }
 
+# The two repo states the hook distinguishes. Named rather than open-coded in each case:
+# they differ by one line, and a case that copies the wrong one silently tests the other
+# path while still passing.
+dirty_repo() { # -> tmpdir containing repo/ with an uncommitted change
+  local t
+  t=$(mktemp -d)
+  new_repo "$t/repo"
+  printf 'a = 2\n' >>"$t/repo/code.py"
+  printf '%s' "$t"
+}
+
+clean_repo() { # -> tmpdir containing repo/ with nothing uncommitted
+  local t
+  t=$(mktemp -d)
+  new_repo "$t/repo"
+  printf '%s' "$t"
+}
+
 is_block() { printf '%s' "$1" | jq -e '.decision == "block"' >/dev/null 2>&1; }
 is_warn() { printf '%s' "$1" | jq -e '.systemMessage | test("UNVERIFIED")' >/dev/null 2>&1; }
 
@@ -71,9 +89,7 @@ is_warn() { printf '%s' "$1" | jq -e '.systemMessage | test("UNVERIFIED")' >/dev
 
 case_approve() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   stub_codex "$t/bin" "CODEX_VERDICT: APPROVE"
   local out
   out=$(run_hook "$REVIEW" "$t" "$t/repo" s1 "$t/bin:$PATH")
@@ -83,9 +99,7 @@ case_approve() {
 
 case_reject() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
   local out
   out=$(run_hook "$REVIEW" "$t" "$t/repo" s1 "$t/bin:$PATH")
@@ -95,8 +109,7 @@ case_reject() {
 
 case_clean_tree() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
+  t=$(clean_repo)
   stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
   local out
   out=$(run_hook "$REVIEW" "$t" "$t/repo" s1 "$t/bin:$PATH")
@@ -112,9 +125,7 @@ case_clean_tree() {
 
 case_block_cap() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
   local one two three
   one=$(run_hook "$REVIEW" "$t" "$t/repo" cap "$t/bin:$PATH")
@@ -203,9 +214,7 @@ case_cap_rollover() {
 
 case_no_codex() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   local out
   out=$(run_hook "$REVIEW" "$t" "$t/repo" s1 "$(path_without_codex "$t/bin")")
   if is_warn "$out" && ! is_block "$out"; then
@@ -218,9 +227,7 @@ case_no_codex() {
 
 case_no_verdict() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   stub_codex "$t/bin" ""
   local out
   out=$(run_hook "$REVIEW" "$t" "$t/repo" s1 "$t/bin:$PATH")
@@ -321,9 +328,7 @@ case_install_backs_up() {
 
 case_reset_rearms() {
   local t
-  t=$(mktemp -d)
-  new_repo "$t/repo"
-  printf 'a = 2\n' >>"$t/repo/code.py"
+  t=$(dirty_repo)
   stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
   # burn both blocks, so the third run is capped and silent
   run_hook "$REVIEW" "$t" "$t/repo" rearm "$t/bin:$PATH" >/dev/null
