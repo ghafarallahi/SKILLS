@@ -46,6 +46,7 @@ or not anyone remembers them:
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
 | [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for the hooks and the installer. Stub `codex`, throwaway repos, no network. |
 | [`hooks/install.sh`](hooks/install.sh) | Idempotent installer — symlinks, plus a non-destructive merge into `settings.json`. |
+| [`CHANGELOG.md`](CHANGELOG.md) | What each version does to your machine, what it costs, and how to uninstall. |
 | [`CODEX-REVIEW.md`](CODEX-REVIEW.md) | Codex's independent verdict on every skill, what changed because of it, and what was declined. |
 
 ## How the hook behaves
