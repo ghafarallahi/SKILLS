@@ -1,5 +1,8 @@
 # SKILLS
 
+[![release](https://img.shields.io/github/v/release/rekopad/SKILLS)](https://github.com/rekopad/SKILLS/releases/latest)
+[![tests](https://img.shields.io/badge/tests-17%20passing-brightgreen)](hooks/selftest.sh)
+
 Claude Code customizations that make an independent model — OpenAI's Codex — confirm work
 before it's reported as done. Claude doesn't self-certify.
 
