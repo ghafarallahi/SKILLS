@@ -90,5 +90,27 @@ verdict → revision → confirmation. All three were NEEDS-WORK on the first pa
 case the finding was a real defect rather than a matter of taste — an unsafe `git stash`,
 a wrong claim about what makes a sink safe, and an overstated reversibility guarantee.
 
+## The rewrite into Simplified Technical English
+
+All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
+previous version and answered one question: did the rewrite lose an instruction?
+
+The first pass lost content in **12 of 13** files. The losses were real, not stylistic:
+
+- `security-audit` — "do not escape the input" for SQL; the link-local ranges; the persons
+  who decide about the corrections for previous versions.
+- `target` — the stop rule became five examples instead of a rule about every action that
+  you cannot reverse.
+- `release` — the rehearsal of the reverse operation on a copy of the production data.
+- `codex-check` — the trigger for `/codex-check`; the request in the words of the user.
+- `write-tests`, `refactor`, `ci-verify`, `code-comments`, `write-docs`, `commit-message`,
+  `root-cause`, `review-changes` — one or two instructions each.
+
+Two rounds of correction put these back. A third comparison gave only differences of one
+word, such as "recursion" for "reentrancy". Those were corrected, and the loop stopped.
+
+**The lesson: a rewrite into a controlled language is lossy. A comparison against the
+previous version is not optional.**
+
 Asked which existing skill is most valuable, it named `target`: "disciplined scoping and
 end-to-end execution make every specialized skill more effective."

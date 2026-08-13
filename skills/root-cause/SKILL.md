@@ -1,77 +1,88 @@
 ---
 name: root-cause
-description: Debug by narrowing to the line where reality diverges from your model, then fix the cause rather than the symptom. Use when something is broken, failing, hanging, flaky, or "worked yesterday", and when asked to debug, investigate a failure, or find why a test fails.
+description: Find the line where the behavior of the code and your model of the code become different. Then correct the cause, not the symptom. Use when code fails, stops, or gives a different result each time, and for "debug this", "why does this fail".
 ---
 
 # Root cause
 
-The bug is never where you assume. It's in the assumption you haven't checked.
+The defect is not in the location that you expect. It is in the assumption that you did not
+examine.
 
-## 1. Reproduce it in one command
+## 1. Cause the failure with one command
 
-Before theorizing, get a command that fails every time you run it. Write it down. Everything
-after this depends on being able to ask "is it still broken?" and get a trustworthy answer
-in seconds.
+Before you make a theory, find a command that fails each time. Write the command down. You
+must be able to ask "is it still incorrect?" and get a correct answer in seconds.
 
-Can't reproduce it every time? Then measure it: run it N times, record the failure rate, and
-make that number your instrument. A bug that fails 3 runs in 100 is reproducible enough —
-you just need enough trials to tell a real change from noise, and to know that one green run
-proves nothing.
+If the failure does not occur each time, measure it. Run the command N times. Record the
+number of failures. Use that number as your instrument. A defect that fails 3 times in 100
+runs is sufficient to measure. You need sufficient runs to see a change.
 
-Compare like with like: same trial count before and after, quoted as a fraction — `6/200
-before, 0/200 after`. For a bug that fails ~3% of the time, a handful of green runs is
-noise; you need enough trials that zero failures would be surprising.
+Compare the same quantities. Use the same number of runs before the correction and after
+the correction. Write the result as a fraction: `6/200 before, 0/200 after`. Use sufficient
+runs. Zero failures must be an unexpected result if the defect is still there. For a defect
+that occurs in 3% of the runs, a small number of correct runs shows nothing.
 
-Chase the conditions (environment, ordering, timing, concurrency, data) that move the rate.
-A fix you can't observe changing that rate is a guess.
+Change the conditions that change the failure rate: the environment, the sequence, the
+time, the concurrent use, or the data. A correction that does not change the rate is a
+guess.
 
-## 2. Read the actual error
+## 2. Read the error
 
-The full text, the full stack, the exit code — not the summarized version, not the last
-line. Errors usually name the file, the value, and the operation. A hang or empty output is
-also evidence: it says the failure came before anything got printed.
+Read the full text, the full stack, and the exit code. Do not read only the last line. An
+error usually gives the file, the value, and the operation. No output is also data, and
+a program that does not stop is also data. Both show that the failure occurred before the
+first output.
 
-Check the obvious environmental lies before the clever theories: stale build, wrong
-binary on `PATH`, cached artifact, editing a file that's a symlink to somewhere else, the
-process reading a different config than the one you changed.
+Examine the simple causes before the complex causes:
 
-## 3. Narrow by halving, not by guessing
+- An old build or an old artifact in a cache.
+- An incorrect program on the `PATH`.
+- A file that is a symbolic link to a different location.
+- A configuration file that the process reads, but you changed a different file.
 
-Cut the space in half, observe, repeat. `git bisect` for "worked yesterday". Comment out
-half the pipeline. Feed the smallest input that still fails. Ten cheap observations beat one
-brilliant hypothesis — and take less time.
+## 3. Divide the search area
 
-## 4. Observe values; never infer them
+Divide the area in two parts. Look at the result. Do this again.
 
-Print the actual value at the boundary. The variable, the path, the exit code, the raw
-response. You're looking for the exact line where what the code sees stops matching what
-you believe it sees — that gap is the bug's address.
+Use `git bisect` when the code was correct before. Remove one half of a pipeline. Use the
+smallest input that fails. Ten small measurements are faster than one complex theory.
 
-Don't reason about what a function returns. Run it and look.
+## 4. Look at the values
 
-## 5. One change at a time
+Print the value at the boundary: the variable, the path, the exit code, or the response.
 
-Change one thing, re-run the repro, keep or revert. Two changes at once and you can't tell
-which mattered — and one of them may be a new bug you'll meet later.
+Find the line where the value that the code has and the value that you expect become
+different. That line is the location of the defect.
 
-## 6. Fix the cause, not the site
+Do not make a conclusion about the result of a function. Run the function. Look at the
+result.
 
-Once you have the failing line, ask what else routes through it. `grep` every caller of the
-function you're about to patch. If four callers share the flaw, the fix belongs in the
-shared path — patching the one the ticket named leaves three broken and teaches you nothing.
+## 5. Make one change at a time
 
-A fix you can't explain the mechanism of isn't a fix. "It works now" after a rebuild, a
-retry, or an unrelated edit means the bug moved, not that it left.
+Make one change. Run the command. Keep the change or remove it.
 
-## 7. Prove it, then fence it
+If you make two changes, you cannot know which change gave the result. One of the two can
+also be a new defect.
 
-- It failed before the change and passes after — verified, not assumed.
-- Leave a regression test that fails against the old code. See
+## 6. Correct the cause, not the location
+
+When you find the line that fails, find each caller. Use `grep` with the name of the
+function.
+
+If four callers have the same fault, correct the shared function. A correction in only the
+caller from the report leaves three faults. It also teaches you nothing.
+
+A correction with no mechanism is not a correction. If the code becomes correct after a
+rebuild, a retry, or an unrelated edit, the defect moved. It did not go away.
+
+## 7. Show the correction and prevent the defect
+
+- The command failed before the change. The command passes after the change. Measure this.
+- Leave a test that fails against the previous code. See
   [`write-tests`](../write-tests/SKILL.md).
-- Report the mechanism in one sentence: what was wrong, why it produced this symptom.
+- Give the mechanism in one sentence: the fault, and how it caused the symptom.
 
-## When stuck
+## When you cannot find the cause
 
-Write down every assumption the working theory rests on, then test the one you're most
-certain of. That's where it'll be — the certain assumption is the one nobody thought to
-check.
+Write down each assumption of your theory. Then examine the assumption that you are most
+sure about. The defect is there. You are sure about it, so you did not examine it.

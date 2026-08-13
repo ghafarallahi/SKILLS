@@ -1,84 +1,89 @@
 ---
 name: write-docs
-description: Write documentation someone can act on — every command actually run, limits and failure modes stated, updated in the same commit as the behavior it describes. Use when writing or updating a README, guide, reference, changelog entry, or docstring.
+description: Write documentation that a reader can use. Run each command before you write it. Give the limits. Update the text in the same commit as the change. Use when you write or update a README, a guide, a reference, a changelog, or a docstring.
 ---
 
 # Write docs
 
-A doc that's wrong is worse than no doc. Missing docs cost the reader time; wrong docs cost
-them trust, then time, then the bug they didn't think to suspect.
+Incorrect documentation is worse than absent documentation. Absent documentation costs the
+reader time. Incorrect documentation costs the reader confidence, then time, then a defect
+that the reader did not expect.
 
 ## Start where the reader starts
 
-Order by what they're trying to do, never by how the code is organized:
+Put the content in the sequence of the tasks of the reader. Do not use the structure of the
+code.
 
-1. What is this and what does it do to my machine or my workflow?
-2. The shortest path to it working.
-3. What it does once it's running.
-4. What it deliberately won't do.
-5. Reference detail, for when they come back with a specific question.
+1. What is this, and what does it change on my system?
+2. The shortest procedure to make it operate.
+3. What it does when it operates.
+4. What it does not do.
+5. The reference data, for a specific question later.
 
-The first screen answers "will this help me, and what does it cost". Anyone still reading
-after that has already decided.
+The first screen answers this question: does this help me, and what does it cost? A reader
+who continues has already made the decision.
 
-## Run every command you write
+## Run each command that you write
 
-Every block a reader might paste gets executed first, in a clean state if the doc claims a
-clean state. Paste the real output, not a plausible rendering of it.
+Run each command block before you put it in the document. Use a clean system if the
+document says that the system is clean. Put the real output in the document. Do not write
+output that looks correct.
 
-Three exceptions: commands that destroy data or cost money, commands needing credentials
-you shouldn't exercise casually, and privileged or production-touching operations (`sudo`,
-anything pointed at live infrastructure). Don't run those — mark them clearly as
-unverified and say what they'll do. Everything else gets run.
+There are three exceptions. Do not run a command that destroys data, a command that costs
+money, or a command that needs a credential, an administrator permission, or access to a
+production system. Mark these commands as unverified. Say what they do.
 
-Untested command blocks are the single biggest source of broken docs — a flag that changed,
-a path that only exists on your machine, a step you do from muscle memory and forgot to
-write down.
+Command blocks that nobody ran are the largest cause of incorrect documentation. An option
+changes, a path exists only on your system, or you do a step from memory and do not write
+it.
 
-State the prerequisites the commands assume — versions, credentials, platform, an already
-running service. A block that works only on your machine reads identical to one that works
-everywhere.
+Give the conditions that the commands need: the versions, the credentials, the platform, or
+a service that must operate. A block that operates only on your system looks the same as a
+block that operates everywhere.
 
-## Document the limits
+## Give the limits
 
-The most useful section is usually the one saying what the thing won't do:
+The most useful section usually says what the product does not do:
 
-- What happens when a dependency is missing or a call fails.
-- Deliberate caps, timeouts, and the reason for them.
-- What it doesn't see (state it can't reach, cases it ignores).
-- Known-broken and not-yet-built, said plainly.
+- What occurs when a dependency is absent or a call fails.
+- The limits, the timeouts, and the reason for them.
+- The data that the product cannot see, and the conditions that it ignores.
+- The parts that do not operate, and the parts that do not exist yet.
 
-Readers forgive limits. They don't forgive discovering a limit at 2am that you knew about.
+A reader accepts a limit. A reader does not accept a limit that you knew and did not write.
 
-## Say why, not just what
+## Give the reason, not only the operation
 
-The code already says what. A doc earns its place by carrying what the code can't: the
-constraint that forced this shape, the alternative rejected and why, the failure that
-motivated the guard.
+The code gives the operation. A document has value when it gives the data that the code
+cannot give: the constraint that caused this design, the alternative that you rejected and
+the reason for that decision, and the failure that made the control necessary.
 
-## Update it in the same commit
+## Update the text in the same commit
 
-Docs rot at the exact moment behavior changes and nobody's watching. If a change makes a
-sentence false, fix the sentence in that commit — not in a cleanup pass that never comes.
-When reviewing a diff, ask which sentence it just invalidated.
+Documentation becomes incorrect at the moment that the behavior changes. If your change
+makes a sentence incorrect, correct the sentence in the same commit. A subsequent pass does
+not occur.
 
-## Cut
+When you review a diff, ask which sentence the diff made incorrect.
 
-- **Adjectives selling the thing.** "Simple", "just", "easy", "powerful", "seamless". If it
-  were easy they wouldn't be reading. `just run X` becomes `run X`.
-- **Restating the signature.** `@param name The name` is noise; document what a reader
-  can't infer — units, ranges, ownership, what happens on failure.
-- **Duplicate explanations.** Two places describing one behavior means one of them will be
-  wrong within a month. Say it once, link to it.
-- **Aspirational content.** Don't document what you plan to build.
+## Remove
 
-## Show before you explain
+- **Words that sell the product.** "Simple", "just", "easy", "powerful", "seamless". If the task were
+  easy, the reader would not read the document. Write `run X`, not `just run X`.
+- **A repetition of the signature.** `@param name The name` gives nothing. Give the units,
+  the limits, the owner, and the result of a failure.
+- **The same explanation in two locations.** One of the two will become incorrect. Write it
+  one time. Use a link.
+- **Content for a product that does not exist.** Do not document a plan.
 
-Real output, a real command, a real file layout — then a sentence about what it means. A
-paragraph describing what a five-line block would have shown is a paragraph nobody reads.
+## Show, then explain
 
-## Before you're done
+Use real output, a real command, or a real file structure. Then write one sentence about
+its meaning. A paragraph that describes what five lines can show is a paragraph that nobody
+reads.
 
-- Every command run, every output real.
-- No sentence you couldn't defend by pointing at code.
-- A reader with only this page and the prerequisites can get to working.
+## Before you finish
+
+- You ran each command. Each output is real.
+- You can show the code for each sentence.
+- A reader with this page and the listed conditions can make the product operate.

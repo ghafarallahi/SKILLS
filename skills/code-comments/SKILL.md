@@ -1,98 +1,99 @@
 ---
 name: code-comments
-description: Write the comments that survive — why over what, the constraint the code can't show, updated in the same diff as the code they describe. Use when adding or reviewing comments, writing docstrings for a public API, or deciding whether a piece of code needs explaining at all.
+description: Write comments that give the reason and the constraint that the code cannot show. Update a comment in the same commit as the code. Use when you add or review comments, when you write a docstring for a public interface, or when you decide if code needs an explanation.
 ---
 
 # Code comments
 
-A stale comment is worse than no comment. Missing explanation costs a reader ten minutes;
-a confident wrong one sends them down a path the code abandoned two years ago, and they
-trust it because someone wrote it deliberately.
+An incorrect comment is worse than no comment. An absent explanation costs the reader ten
+minutes. An incorrect explanation sends the reader to a design that the code no longer has,
+and the reader trusts it because a person wrote it.
 
-Write few, make them load-bearing, keep them true.
+Write few comments. Make each comment necessary. Keep each comment correct.
 
-## First, try to delete it
+## First, try to remove the comment
 
-Most comments are a symptom. Before writing one, see whether the code can just say it:
+Most comments show a fault in the code. Before you write a comment, try to make the code
+give the same data:
 
-- A better name — `retryAfterThrottle` needs no comment; `handle2` does.
-- A named constant instead of `86400 // seconds in a day`.
-- An extracted function whose name is the sentence you were about to write.
-- An early return instead of `// if we get here, the user is valid`.
+- A better name. `retryAfterThrottle` needs no comment. `handle2` needs one.
+- A constant with a name, in place of `86400 // seconds in a day`.
+- A function with a name that is the sentence that you were about to write.
+- An early return, in place of `// if we get here, the user is valid`.
 
-If restructuring says it, restructure. A comment is what's left when the language can't
-carry the meaning.
+If a change to the code gives the data, change the code. A comment is what remains when the
+language cannot hold the meaning.
 
-## Comment the why, and the things code can't hold
+## Write the reason and the data that code cannot hold
 
-What survives review and stays useful:
+These comments keep their value:
 
-- **Why this way** — the alternative you rejected, the constraint that forced the shape,
-  the reason the obvious approach doesn't work here.
-- **The surprise** — a workaround for an upstream bug (link it), an ordering that looks
-  arbitrary but isn't, an optimization that made the code uglier and why it was worth it.
-- **The invariant** — what must stay true, especially if a future edit could quietly break
-  it. "Callers hold the lock" belongs in the code.
-- **The lie in the interface** — a function whose name promises more or less than it does,
-  until someone renames it.
-- **Deliberate limits** — a shortcut with a known ceiling, named, with what would justify
-  replacing it. A tagged marker (`TODO`, `NOTE`, or your codebase's own) makes them
-  greppable later.
-- **The domain rule** — code that encodes a business or regulatory decision should say
-  which rule it implements and where that rule actually lives: the policy doc, the contract
-  clause, the statute, the person who decided. `if (turnover > 85000)` is unreadable without
-  it, and unmaintainable when the threshold changes and nobody knows what it was tracking.
+- **The reason for this design.** The alternative that you rejected, the constraint that
+  caused this shape, and why the usual method does not operate here.
+- **The unexpected part.** A temporary solution for a defect in a different product. Give
+  the link. Also: a sequence that looks arbitrary, or an optimization that made the code
+  less clear. For the optimization, give the measurement that made it necessary.
+- **The rule that must stay true.** Write it when a subsequent edit can break it. Example:
+  the callers hold the lock.
+- **An incorrect name.** A function whose name gives more or less than the function does,
+  until a person changes the name.
+- **A known limit.** A temporary solution with a maximum, and the condition that makes a
+  replacement necessary. Use a marker such as `TODO` or `NOTE`, so that you can find them.
+- **A rule from the business or from a regulation.** Give the rule that the code
+  implements. Give the location of that rule: the policy document, the contract, the law, or
+  the person who decided. `if (turnover > 85000)` has no meaning without this. It also
+  becomes impossible to maintain when the value changes.
 
-Link the issue, RFC, ticket, spec or commit that holds the full story. One URL beats a
-paragraph that's a summary of a summary.
+Give a link to the issue, the specification, or the commit with the full data. One link is
+better than a short summary of a summary.
 
-## Don't write
+## Do not write
 
-- **Narration.** `i++ // increment i`, `// loop over users`, `// constructor`.
-- **Signature restatement.** `@param name The name.` Document what a reader can't infer:
-  units, ranges, ownership, nullability, what happens on failure.
-- **Diff commentary.** `// added error handling`, `// changed per review`, `// new`. That's
-  what the history is for, and it's meaningless within a week.
-- **Commented-out code.** Delete it. Git remembers, and nobody dares remove it later
-  because they don't know if it's load-bearing.
-- **Section banners** in a file that would be better split.
-- **Apologies.** `// this is ugly but works` — either explain why it must be this way, or
-  fix it.
+- **A description of the operation.** `i++ // increment i`. `// loop over users`.
+- **A repetition of the signature.** `@param name The name`. Give the units, the limits, the
+  owner, and the result of a failure.
+- **A description of the change.** `// added error handling`. `// changed per review`. The
+  history has this data. The comment has no value after one week.
+- **Code that you made into a comment.** Delete it. Git keeps it. If you leave it, no
+  person will remove it later, because they do not know if it is necessary.
+- **A title for a section** in a file that you must divide into two files.
+- **An apology.** `// this is ugly but works`. Give the reason, or correct the code.
 
-## Docstrings on a public API are a contract
+## A docstring on a public interface is a contract
 
-For anything other people call, document what they can't read off the type:
+For code that other persons call, give the data that the types cannot give:
 
-- Units and ranges (`timeout` in seconds? milliseconds?).
-- What it does on failure — returns null, throws, retries, blocks.
-- Side effects, allocations, whether it mutates its arguments.
-- Thread-safety and reentrancy, if that's a question anyone could have.
-- Ownership: who closes the handle, who frees the buffer.
+- The units and the limits. Is `timeout` in seconds or in milliseconds?
+- The result of a failure: null, an exception, a retry, or a block until a condition is
+  true.
+- The effects on other systems, the memory that it allocates, and if the function changes
+  its arguments.
+- Which values can be null, and what the function does with a null value.
+- Use with more than one thread, and reentrancy, if a caller can ask these questions.
+- The owner: which code closes the handle or releases the memory.
 
-An example beats prose for anything with a non-obvious call shape.
+An example is better than text for a call with an unusual shape.
 
-## TODOs that mean something
+## Write a TODO that has a meaning
 
-A bare `TODO: fix this` is a wish with no owner and no date. Make it actionable: what needs
-doing, and a link to the issue tracking it. If it isn't worth an issue, it isn't worth a
-TODO — either do it now or delete the line.
+`TODO: fix this` has no owner and no date. Write the necessary task and a link to the issue.
+If the task does not need an issue, it does not need a TODO. Do the task now, or delete the
+line.
 
-## Keep them true
+## Keep the comments correct
 
-This is the part that matters most and gets skipped:
+This is the most important part, and persons omit it:
 
-- Change the code, re-read the comments around it in the same diff. If your change made a
-  sentence false, fix it now — a follow-up pass never comes.
-- Reviewing a diff, read the comments as claims to verify, not as decoration. A comment
-  that contradicts the code it sits above is a finding, not a nit.
-- Renaming or moving code takes its comments with it. Orphaned explanations point at
-  nothing.
-- If a comment can't be kept true — it describes something in flux — say less, or delete
-  it. Silence is honest.
+- When you change code, read the comments near it in the same commit. If your change made a
+  sentence incorrect, correct the sentence now. A subsequent pass does not occur.
+- When you review a diff, read each comment as a statement to verify. A comment that
+  disagrees with its code is a finding.
+- When you move code or change its name, move its comments with it. An explanation with no code shows nothing.
+- If you cannot keep a comment correct, write less or delete it. No comment is honest.
 
-## Match the codebase
+## Use the conventions of the codebase
 
-Density and style are house conventions, not personal ones. Read the file you're editing:
-if it uses a doc format (`javadoc`, `rustdoc`, `docstring`), use it; if it comments only at
-module boundaries, don't start annotating every branch. Consistency is what makes an
-unusual comment stand out as important.
+The quantity and the style are conventions of the project. Read the file that you edit. If
+it uses a documentation format, use the same format. If it has comments only at the start of
+each module, do not add a comment to each branch. A consistent style makes an unusual
+comment visible.

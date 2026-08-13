@@ -1,74 +1,77 @@
 ---
 name: commit-message
-description: Write a commit message from the actual staged diff — imperative subject, a body that explains why, no invented claims. Use when committing, when asked to "write a commit message", "commit this", "what should this commit say", or when amending or rewording an existing message.
+description: Write a commit message from the staged diff. Use an imperative subject and a body that gives the reason. Do not write a claim that you cannot support. Use when you commit, for "write a commit message", "commit this", or when you correct a message.
 ---
 
 # Commit message
 
 ## Read the diff first
 
-Write from `git diff --staged`, never from memory of what you set out to do. What you
-intended and what's staged drift apart constantly — half-finished edits, a debug line left
-in, a file you forgot to add. The message describes what's actually there.
+Write the message from `git diff --staged`. Do not write it from memory.
 
-If the staged diff turns out to be two unrelated changes, say so and offer to split it. One
-logical change per commit is what makes `git log` worth reading later.
+Your intention and the staged content are frequently different. An edit can be incomplete.
+A debug line can remain. A file can be absent. The message must describe the staged
+content.
+
+If the staged diff contains two unrelated changes, tell the user. Offer to divide the
+commit. One change for each commit makes the history usable.
 
 ## Subject
 
-Imperative mood, capitalized, no trailing period, ~50 characters. It completes the sentence
-"applying this commit will…" — `Add hooks/install.sh`, `Review changes outside git repos`,
-`Lead the README with a quick start`.
+Write the subject in the imperative. Use a capital letter at the start. Do not use a full
+stop at the end. Use approximately 50 characters.
 
-- No `feat:` / `fix:` / `chore:` prefixes unless the repo already uses them. Match the
-  existing log — run `git log --format='%s' -20` and follow what you see.
-- Name the change, not the file that moved. `Fix off-by-one in the retry backoff` beats
-  `Update retry.py`.
-- Nothing vague: no "various fixes", "updates", "cleanup", "misc".
+The subject completes this sentence: "This commit will ...". Examples: `Add
+hooks/install.sh`. `Review changes outside git repos`.
+
+- Do not use a `feat:`, `fix:`, or `chore:` prefix if the repository does not use one. Run `git log
+  --format='%s' -20`. Use the style of the repository.
+- Name the change. Do not name the file. `Fix off-by-one in the retry backoff` is better
+  than `Update retry.py`.
+- Do not write an unclear subject: "various fixes", "updates", "cleanup".
 
 ## Body
 
-Skip it for genuinely trivial commits (a typo, a version bump). Otherwise wrap at 72 and
-answer what the diff can't:
+Do not write a body for a trivial commit, such as a correction of a spelling error. For all
+other commits, use a maximum line length of 72 characters. Give the data that the diff
+cannot give:
 
-- **Why.** The diff shows what changed; it can't show the failure mode you hit, the
-  alternative you rejected, or the constraint that forced the shape. If you don't actually
-  know the why — no issue, no conversation, no evidence in the history — ask, or leave it
-  out. An invented rationale is worse than a bare subject line.
-- **Decisions with a cost.** A deliberate limit, a known ceiling, a shortcut and its
-  upgrade path.
-- **Verification** — but only what you actually ran. See below.
+- **The reason.** The diff shows the change. The diff does not show the failure, the
+  alternative that you rejected, or the constraint. If you do not know the reason, ask the
+  user or write no reason. An incorrect reason is worse than no reason.
+- **A decision with a cost.** A limit, a known maximum, or a temporary solution. For a
+  temporary solution, give the condition that makes a replacement necessary.
+- **The verification.** Write only the checks that you ran.
 
-Don't enumerate every file; that's what `--stat` is for. Don't restate the subject in
-longer words.
+Do not list each file. `--stat` lists the files. Do not repeat the subject.
 
-## Never claim what you didn't do
+## Do not write a claim that you cannot support
 
-The single rule that matters most. A commit message is a durable record, and a false one
-misleads whoever bisects to it a year from now.
+This is the most important rule. A commit message is a permanent record. An incorrect
+record gives incorrect data to the person who reads it in one year.
 
-- Don't write "tested" / "verified" / "all tests pass" unless you ran them and saw them
-  pass. Say what you ran.
-- Don't describe intended behavior as confirmed behavior.
-- If something is unfinished or known-broken, put it in the body. A commit that admits a
-  gap is worth more than one that hides it.
+- Do not write "tested" or "all tests pass" if you did not run the tests and see the
+  result. Name the command that you ran.
+- Do not write that a behavior is confirmed if you did not confirm it.
+- If the work is incomplete, write this in the body. A commit that shows a limit is better
+  than a commit that hides it.
 
 ## Trailers
 
-Match the repo. If commits here carry a `Co-Authored-By:` trailer, keep it — a blank line
-before the trailer block, one per line.
+Use the trailers of the repository. If the commits have a `Co-Authored-By:` trailer, keep
+it. Put one empty line before the trailers. Write one trailer for each line.
 
 ## Then commit
 
-Pass the message on stdin so the body keeps its line breaks:
+Send the message on stdin. The line breaks stay correct:
 
 ```bash
 git commit -F - <<'EOF'
-Subject line here
+The subject line
 
-Body here.
+The body.
 EOF
 ```
 
-Committing is local and reversible, so it needs no confirmation once asked for. **Pushing
-is not** — it's outward-facing, so it waits for the user to ask.
+A commit is local and reversible. It needs no approval after the user asks for it. A push
+is different. A push sends data to other persons. Wait for the user to ask for a push.

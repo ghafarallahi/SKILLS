@@ -1,80 +1,87 @@
 ---
 name: write-tests
-description: Write tests that would actually catch the bug — proven by watching them fail against the broken code first. Use when adding tests, when asked "write a test for this", "add coverage", "is this tested", or after fixing a bug that had no test.
+description: Write a test that finds the defect. Show that the test fails against the incorrect code first. Use when you add a test, for "write a test for this", "add coverage", "is this tested", or after you correct a defect that had no test.
 ---
 
 # Write tests
 
-## Prove the test can fail
+## Show that the test can fail
 
-A test written after the fix usually passes for the wrong reason. Before you trust a new
-test, run it against the broken code and watch it fail:
+A test that you write after the correction usually passes for an incorrect reason. Run the
+test against the incorrect code. See it fail. Then use it.
 
-- Testing a bug fix? Revert the fix reversibly — `git stash`, a scratch worktree, or a copy
-  of the file — run the test, confirm it fails with a message that names the real problem,
-  then restore and confirm it passes. Never hand-edit the live file and trust yourself to
-  put it back.
-- Writing a test for existing code? Break that code deliberately — invert the condition,
-  return the wrong default — and confirm the test goes red.
+- **For a correction of a defect:** remove the correction in a reversible way. Use `git
+  stash`, a temporary worktree, or a copy of the file. Run the test. The test must fail with
+  a message that names the defect. Then put the correction back. The test must then pass.
+  Do not edit the file manually and then rely on your memory to put it back.
+- **For code that exists:** make the code incorrect. Invert a condition or return an
+  incorrect default value. The test must fail.
 
-A test that has never failed is an assertion about nothing. This is the only step here that
-can't be skipped.
+A test that never failed does not test anything. Do not omit this step.
 
-Run the whole suite before and after, and know which failures were already there. A case
-that goes green while three others turn red isn't progress.
+Run the full test suite before the change and after the change. Know which tests failed
+before. A new test that passes while three other tests fail is not progress.
 
-## Test the failure paths
+## Test the paths that fail
 
-Happy-path coverage is the coverage that already works. Bugs live in:
+The paths that succeed already work. Defects are in these locations:
 
-- The error branch, the retry, the timeout, the cleanup that runs after a failure.
-- Boundaries: 0, 1, n, n+1, empty, missing, null, duplicate.
-- The second call. State left behind by the first is where idempotence dies.
-- What happens when a dependency is absent, slow, or returns garbage.
+- The error path, the retry, the timeout, and the cleanup after a failure.
+- The limits: 0, 1, n, n+1, empty, absent, null, and a duplicate value.
+- The second call. State from the first call causes a failure here.
+- The conditions when a dependency is absent, slow, or gives incorrect data.
 
-Count the branches in the code you're covering. If your tests only reach the ones that
-succeed, you've tested that success succeeds.
+Count the branches in the code. If your tests use only the branches that succeed, you test
+that success succeeds.
 
-## Test the guarantee, not the implementation
+## Test the promise, not the implementation
 
-Name the case after the promise it defends — `a skipped link fails loudly`, not
-`test_link_2`. When the name reads like a sentence about behavior, a failure tells you what
-broke without opening the file.
+Name the test for the promise that it protects: `a skipped link fails loudly`. Do not name
+it `test_link_2`. A name that is a sentence about the behavior shows you the fault with no
+need to open the file.
 
-Assert on observable behavior: return values, exit codes, what landed on disk, what was
-printed. Don't assert on internals a refactor would rename; that's a test that fails when
-nothing is wrong.
+Test the behavior that you can see: the return value, the exit code, the content of a file,
+or the output. Do not test the internal parts: a private function, an internal name, a data
+structure inside the code, or the number of calls to a function. A refactor changes these
+parts, and then the test fails when the code is correct.
 
-## Keep each case isolated
+## Isolate each test
 
-Every case gets its own temporary state — its own directory, database, `TMPDIR`, `HOME`,
-whatever the code keys off. Cases that share state pass or fail depending on order, and a
-suite you can't trust is worse than no suite.
+Give each test its own temporary state: its own directory, database, `TMPDIR`, or `HOME`.
+Use the value that the code reads.
 
-Clean up at the end of the case, not the end of the run.
+Tests that use the same state pass or fail with the sequence. You cannot use the results.
 
-## Stub the edges, not the subject
+Do the cleanup at the end of each test, not at the end of the suite. This includes the
+temporary state, the open handles, and each change that the test made outside itself.
 
-Stub what's slow, paid, networked, or nondeterministic — the API call, the clock, the model
-invocation. Never stub the thing you're testing; a test of a stub proves the stub works.
+## Replace the external parts, not the subject
 
-Prefer a real temp file over a mocked filesystem, a real subprocess over a mocked one. The
-closer the test runs to production, the more it's worth.
+Replace the parts that are slow, that cost money, that use the network, or that give a
+different result each time. Examples: an API call, the clock, or a model.
 
-## Match the repo
+Never replace the code that you test. A test of a replacement tests the replacement.
 
-Use whatever the project already uses. If it has no framework, don't introduce one — plain
-`assert`s and a `main` that exits non-zero is a complete test suite. One command to run
-everything, non-zero on failure.
+Use a real temporary file, not a simulated file system. Use a real subprocess. A test that
+is nearer to production has more value.
 
-## Failure output is the product
+## Use the tools of the project
 
-When a case fails, the output must say what was expected, what happened, and where. A bare
-`FAIL case_7` sends the reader back into the code to reconstruct what you already knew.
-Print the actual value.
+Use the tools that the project uses: the test framework, the assertions, the fixtures, and
+the file layout. If the project has no framework, do not add one. Assertions and a `main`
+function that exits with a value that is not zero are sufficient.
 
-## Don't
+One command must run all the tests. The command must exit with a value that is not zero
+after a failure.
 
-- Test the standard library, the framework, or the compiler.
-- Write a case you can't explain the purpose of in one sentence.
-- Chase a coverage number — it counts lines reached, not guarantees defended.
+## The output of a failure is the product
+
+After a failure, the output must give the expected value, the actual value, and the
+location. `FAIL case_7` sends the reader back to the code. Print the actual value.
+
+## Do not
+
+- Do not test the standard library, the framework, or the compiler.
+- Do not write a test if you cannot give its purpose in one sentence.
+- Do not use a coverage percentage as a target. It counts the lines that ran. It does not
+  count the promises that you protect.

@@ -1,73 +1,75 @@
 ---
 name: target
-description: Break a task into the smallest possible steps, ask every open question in one batch up front, then run all the way to the end without stopping to check in. Use when the user says "/target", "go to the end", "run it to the end", "don't stop and ask me", "do the whole thing", or hands over a multi-step task and walks away.
+description: Divide a task into small steps. Ask all the questions in one group. Then do all the steps to the end with no interruption. Use for "/target", "go to the end", "run it to the end", "do not stop and ask me", "do the whole thing".
 ---
 
 # Target
 
-One round of questions, then no interruptions until it's done.
+Ask the questions one time. Then do not interrupt the user again.
 
-## 1. Break it down first
+## 1. Divide the task first
 
-Before asking anything, decompose the task into the smallest steps that can each be
-finished and checked on their own. Write them out with `TaskCreate` so the user can watch
-progress while they're away.
+Divide the task into the smallest steps. Each step must have an end and a check. Record the
+steps with `TaskCreate`. The user can then see the progress.
 
-- Small enough that a step failing tells you exactly what broke.
-- Ordered so blocked steps sit at the end, not the middle.
-- Split anything you can't name a success check for — that's a sign it's still two steps.
+- Make each step small. A failure must show you the exact fault.
+- Put the blocked steps at the end of the list.
+- Divide a step again if you cannot name a check for it. It is two steps.
 
-The breakdown is what surfaces the real questions. A task decomposed badly produces
-vague questions; a task decomposed well produces sharp ones.
+The division shows you the questions. A bad division gives unclear questions. A good
+division gives precise questions.
 
-## 2. Ask everything at once
+## 2. Ask all the questions in one group
 
-Read the whole breakdown, collect every genuine unknown, and ask them in a single
-`AskUserQuestion` round (up to 4 per call, so batch tightly).
+Read the full list of steps. Collect the unknown items. Ask them in one `AskUserQuestion`
+call. The call accepts a maximum of 4 questions.
 
-**Only ask what changes what you build.** For everything else, pick the obvious default,
-state it in your summary, and move on. A question you could answer by reading the code is
-not a question — go read it. Interrogation defeats the point of the command.
+**Ask only about an item that changes the work.** For all other items, select the usual
+option, record the selection, and continue. Do not ask a question that the code answers.
+Read the code.
 
-Ask about: which of two incompatible designs, destinations that can't be guessed (repo,
-branch, path), visibility and blast radius, missing credentials or access.
+Ask about these items:
 
-Don't ask about: naming, formatting, library choice with an obvious default, anything
-already settled in the conversation, or permission to continue.
+- Two designs that you cannot use together.
+- A destination that you cannot know: a repository, a branch, or a path.
+- The persons who can see the result, and the possible damage.
+- A credential or an access permission that you do not have.
 
-## 3. Run to the end
+Do not ask about these items: a name, a format, a usual library, an item that the
+conversation contains, or permission to continue.
 
-Work the list top to bottom without checking in. Mark each step with `TaskUpdate` as you
-go. When something surprises you mid-run, decide it yourself under a stated assumption and
-keep going — record the assumption for the final report.
+## 3. Do the steps to the end
 
-If a step is genuinely blocked, do every other step first, then report what's left. Never
-stall the whole run on one blocked item.
+Do the steps in sequence. Do not stop to ask the user. Mark each step with `TaskUpdate`.
 
-**Still stop for:** anything irreversible or outward-facing that the user hasn't already
-authorized — pushing, publishing, deleting, sending, spending. "Run to the end" is
-permission to skip check-ins, not permission to take those actions unasked.
+If an unexpected condition occurs, make the decision. Record the assumption. Continue.
+
+If a step is blocked, do all the other steps first. Then report the blocked step. Do not
+stop the full task for one step.
+
+**Stop for each action that you cannot reverse, and for each action that other persons can
+see**, if the user did not approve it before. Examples: a push, a publication, a deletion,
+a message, or a payment. The list is not complete. "Go to the end" permits you to stop the
+check-ins. It does not permit these actions.
 
 ## 4. Verify before you report
 
-Run whatever the repo uses to tell you it works — the suite, the linter, the build — and
-check the result against what was actually asked, step by step. A run that ends without
-that check is a run that reports intentions.
+Run the checks of the project: the test suite, the linter, or the build. Compare the result
+with the request, step by step.
 
-Keep the evidence: the command and its result line go in the report, not a claim that it
-passed.
+Keep the evidence. Put the command and the result line in the report. Do not report that
+the check passed.
 
-## 5. Report once, at the end
+## 5. Report one time at the end
 
-- What got done, what didn't, and why.
-- Every assumption you made instead of asking.
-- Anything you found that's worth a follow-up.
+- The steps that are complete, the steps that are not complete, and the reasons.
+- Each assumption that you made.
+- Each item for a subsequent task.
 
-State failures plainly with their output. A run that finished 9 of 12 steps and says so is
-worth more than one that claims 12.
+Report a failure with its output. A report of 9 complete steps from 12 is better than an
+incorrect report of 12.
 
-## Notes
+## Note
 
-If the codex-review Stop hook is installed, it reviews the whole run when you finish — so
-the end of a `/target` run is also where an independent model gets its say. Expect the
-occasional block on the last step; fix and finish.
+If the codex-review hook is installed, it examines the full task at the end. Expect an occasional rejection at
+the last step. Correct the fault. Then complete the task.

@@ -1,96 +1,100 @@
 ---
 name: pr-description
-description: Write a pull request description aimed at the reviewer — why it exists, where to start reading, how it was verified, what's deliberately not in it. Use when opening a PR, drafting a PR body, or when asked "write the PR description" or "summarize this branch".
+description: Write a pull request description for the reviewer. Give the reason, the location to start reading, the verification, and the work that is not in the request. Use when you open a pull request, write a pull request body, or summarize a branch.
 ---
 
 # PR description
 
-A commit message explains a change to the future. A PR description explains it to one tired
-person who has to decide whether it's safe, today. Write for them.
+A commit message explains a change to a person in the future. A pull request description
+explains the change to one tired person who must decide today if the change is safe. Write
+for that person.
 
-## Read the whole branch first
+## Read the full branch first
 
-Find the base branch rather than assuming `main`:
+Find the base branch. Do not assume that it is `main`:
 
 ```bash
 base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
-# nothing? ask, or read it off the remote — don't assume main:
+# If this gives no result, ask, or read the name from the remote:
 #   git remote show origin | sed -n 's/.*HEAD branch: //p'
 git log "$base"..HEAD --oneline
 git diff "$base"...HEAD --stat
 git diff "$base"...HEAD
 ```
 
-Check for `.github/PULL_REQUEST_TEMPLATE.md` (or `docs/`, `.gitlab/`) and fill that structure
-instead of inventing your own — a team that wrote a template wants it used.
+Use three dots. Three dots compare the branch with the base commit. Two dots compare the
+branch with the current state of the base branch, which can contain other changes.
 
-Three dots, not two — you want the branch against its merge base, not against wherever main
-has drifted to. The PR is the sum of the commits, and it usually says something none of them
-say alone.
+Look for `.github/PULL_REQUEST_TEMPLATE.md`, or the same file in `docs/` or `.gitlab/`. Use
+that structure. A team that wrote a template wants the template.
 
-If the diff turns out to be two unrelated changes, say so and offer to split the PR. That
-costs you a minute and saves the reviewer an hour.
+The pull request is the sum of the commits. It usually shows a fact that no single commit
+shows.
 
-## Lead with why
+If the diff contains two unrelated changes, say this and offer to divide the pull request.
+This costs you one minute. It saves the reviewer one hour.
 
-First paragraph, 2–4 sentences: the problem, and what's different once this lands. Not the
-implementation — the reviewer gets that from the diff. What they can't get from the diff is
-what went wrong without this, or what forced the shape.
+## Give the reason first
 
-If it fixes a reported bug, state the symptom in the reporter's words, then the mechanism in
-yours.
+Write 2 to 4 sentences: the problem, and the difference after the change. Do not give the
+implementation. The reviewer reads the implementation in the diff. The reviewer cannot read
+the failure that occurred without this change, or the constraint that caused this shape.
 
-## Point at where to start
+If the change corrects a reported defect, give the symptom in the words of the reporter.
+Then give the mechanism in your words.
 
-The single highest-value line in any PR body:
+## Give the location to start reading
 
-> Start at `parser.go:88` — that's the only behavior change. Everything else is the rename
-> it forced.
+This is the most useful line in a pull request:
 
-Reviewers ration attention. Spend it for them: name the risky hunk, the one-way door, the
-part you're least sure about. A 600-line diff with 20 interesting lines should say which 20.
+> Start at `parser.go:88`. That is the only change of behavior. The other changes are the
+> rename that it made necessary.
 
-## Say how it was verified
+A reviewer has limited attention. Use it correctly. Name the part with risk, the part that
+you cannot reverse, and the part that you are least sure about. A diff of 600 lines with 20
+important lines must say which 20 lines.
 
-Commands you actually ran, and the part of the output that matters — a result line, not a
-thousand lines of log, and never output carrying tokens, hostnames, or customer data.
+## Give the verification
 
-Never a test you didn't run — see [`write-tests`](../write-tests/SKILL.md) for what counts
-as verified.
+Give the commands that you ran, and the part of the output that has a meaning. Give a
+result line, not one thousand lines of a log. Do not give output that contains a token, a
+host name, or customer data.
+
+Never give a test that you did not run. See [`write-tests`](../write-tests/SKILL.md).
 
 ```
 bash hooks/selftest.sh    → 17 passed, 0 failed
 ```
 
-Include the negative check when there is one: what you broke on purpose to confirm the new
-test catches it.
+Give the negative check when you have one: the code that you made incorrect, to show that
+the new test finds the defect.
 
-## State the blast radius
+## Give the possible damage
 
-- What breaks if this is wrong, and who notices first.
-- Migrations, config, env vars, feature flags — and whether it's a one-way door.
-- How to roll back. If rollback isn't just a revert, that belongs in the body, not in an
-  incident channel later.
+- What fails if this change is incorrect, and who sees the failure first.
+- The migrations, the configuration, the environment variables, and the feature flags. Say
+  if you can reverse them.
+- The method to reverse the change. If a revert is not sufficient, write the method here.
 
-## Say what's not in it
+## Give the work that is not in the request
 
-Scope you deliberately left out, follow-ups you plan, known-rough edges. This is what stops
-a reviewer from spending their review asking for things you already decided against — and
-it's how you keep a "while you're in there" from doubling the diff.
+Name the work that you did not do, the subsequent tasks, and the parts that are incomplete.
+This stops a reviewer from asking for work that you already decided against. It also stops
+the request from becoming larger during the review.
 
-## Cut
+## Remove
 
-- File-by-file narration. The Files tab already did that.
-- Restating each commit message; they're one click away.
-- "Minor refactor" on a 400-line diff, or any other description the diff contradicts.
-- Selling adjectives. The reviewer is deciding on risk, not buying anything.
+- A description of each file. The list of files gives this data.
+- A repetition of each commit message. They are one click away.
+- "Minor refactor" on a diff of 400 lines, or a description that the diff disagrees with.
+- Words that sell the change. The reviewer decides about risk.
 
 ## Title
 
-Same rules as the commit subject — imperative, specific, no type prefix unless the repo uses
-one. See [`commit-message`](../commit-message/SKILL.md).
+Use the rules of the commit subject: imperative, specific, and no type prefix if the
+repository does not use one. See [`commit-message`](../commit-message/SKILL.md).
 
 ## Then stop
 
-Draft the body and hand it over. Opening the PR, pushing the branch, and requesting review
-are outward-facing — they wait for the user to ask.
+Write the description and give it to the user. A push, the creation of the pull request,
+and a request for a review send data to other persons. Wait for the user to ask.

@@ -1,68 +1,74 @@
 ---
 name: ci-verify
-description: Run the checks the pipeline will run, before pushing — discovered from the CI config rather than guessed, against a clean tree, with pre-existing failures separated from new ones. Use before pushing or opening a PR, when CI is red, or when asked "will this pass CI".
+description: Run the checks that the pipeline runs, before you push. Read the checks from the CI configuration. Run them against the commit that you will push. Divide new failures from failures that exist already. Use before a push or a pull request, when CI fails, or for "will this pass CI".
 ---
 
 # CI verify
 
-Two questions this answers: *will merge accept this*, and *when it didn't, why not*.
+This skill answers two questions. Will the pipeline accept this change? When it did not
+accept the change, why?
 
-## Discover what actually gates merge
+## Find the checks that control the merge
 
-Never run the checks you remember. Read the pipeline:
+Do not run the checks that you remember. Read the pipeline:
 
 ```bash
 ls .github/workflows/ .gitlab-ci.yml .circleci/ Jenkinsfile 2>/dev/null
 cat .github/workflows/*.y*ml
 ```
 
-Then the task runners it calls — `Makefile`, `justfile`, `package.json` scripts, `tox.ini`,
-`noxfile.py`, `.pre-commit-config.yaml`, `composer.json`. The authority on what must pass is
-the pipeline definition, not habit and not the README.
+Then read the files that the pipeline calls: `Makefile`, `justfile`, the scripts in
+`package.json`, `composer.json`, `tox.ini`, `noxfile.py`, or `.pre-commit-config.yaml`. The pipeline
+configuration is the authority. Your memory and the README are not.
 
-Note which jobs are required versus advisory, and whether there's a matrix — passing on one
-version says nothing about the other three.
+Record which jobs are necessary and which jobs are advisory. Record if there is a matrix. A
+result from one version gives no data about the other versions.
 
-## Run them the way CI does
+## Run the checks in the same way
 
-In the pipeline's own order, with its own commands. Not `pytest tests/unit` when CI runs
-`make check`; the wrapper usually adds flags that change the outcome (`-W error`,
-`--frozen-lockfile`, coverage thresholds).
+Use the commands of the pipeline, in the sequence of the pipeline. Do not run `pytest
+tests/unit` when the pipeline runs `make check`. The command of the pipeline usually adds
+options that change the result, such as `-W error` or a coverage limit.
 
-Cheap gates first — format, lint, types — then tests, then build. A type error found in two
-seconds shouldn't wait behind an eight-minute suite. But a green lint is not a green
-pipeline: finish the list before you call it verified.
+Run the fast checks first: the format, the linter, and the types. Then the tests. Then the
+build. A type error that you find in two seconds must not wait for a suite of eight
+minutes. A linter that passes is not a pipeline that passes. Run the full list.
 
-## Test what CI will actually see
+## Test the code that CI will get
 
-CI checks out a commit. It cannot see your working directory. The classic failure is a file
-that was never `git add`ed: everything passes locally and the pipeline dies on a missing
-import.
+CI gets a commit. CI cannot see your working directory. The usual failure is a file that
+you did not add to Git. All checks pass on your system, and the pipeline stops because an
+import is absent.
 
-So verify the exact commit you're about to push, in a tree of its own — never by stashing,
-which removes the changes you're trying to verify and leaves them parked somewhere you can
-forget them:
+Verify the exact commit that you will push, in a separate directory. Do not use `git
+stash`. A stash removes the changes that you must verify, and it leaves them in a location
+that you can forget:
 
 ```bash
-git status --porcelain                      # uncommitted? CI will not have it
-git worktree add /tmp/verify HEAD           # the SHA that will land
+git status --porcelain                      # not empty? CI will not have these files
+git worktree add /tmp/verify HEAD           # the commit that you will push
 cd /tmp/verify && <run the checks>
 git worktree remove /tmp/verify
 ```
 
-If `git status --porcelain` isn't empty, decide deliberately whether those files belong in
-the commit. A clean local run over a dirty tree proves nothing about the push.
+If `git status --porcelain` gives output, decide if those files belong in the commit. A
+correct result on a directory with changes shows nothing about the push.
 
-Also reproduce what the environment pins: the language version from the workflow, a clean
-dependency install from the lockfile (not your warm `node_modules`), and required env vars.
-The usual gaps between "passes here" and "passes there" are stale dependencies, a different
-runtime version, a case-insensitive filesystem, locale or timezone, and network access you
-have and the runner doesn't.
+Also use the same conditions as the pipeline. Use the language version from the workflow.
+Install the dependencies from the lock file into an empty directory. Do not use the
+packages that your system installed before. Set the necessary environment variables.
 
-## Separate new failures from old
+These differences cause most of the failures:
 
-Before believing you broke something, run the same checks on the merge base — again in its
-own tree, so your working copy is never disturbed:
+- Old dependencies and a different runtime version.
+- A file system that ignores capital letters.
+- A different time zone or a different language setting.
+- Network access that your system has and the runner does not have.
+
+## Divide new failures from old failures
+
+Before you conclude that your change caused a failure, run the same checks on the base
+commit. Use a separate directory again:
 
 ```bash
 git worktree add /tmp/base "$(git merge-base HEAD origin/HEAD)"
@@ -70,33 +76,39 @@ cd /tmp/base && <run the checks>
 git worktree remove /tmp/base
 ```
 
-"Fails on main too" changes what you do next — and telling a reviewer that saves them the
-same detour. Never fix a pre-existing failure silently inside an unrelated change; it makes
-the diff unreviewable.
+"This also fails on the base commit" changes your next action. It also saves the reviewer
+the same work. Do not correct an old failure inside an unrelated change. The diff then
+becomes difficult to review.
 
-## When CI fails and local passes
+## When CI fails and your system passes
 
-Don't re-run it hoping. That's a coin flip you pay for in minutes.
+Do not run the pipeline again only to see if the result changes. That costs minutes and
+gives no data. Run it again after you change something, or to measure a failure that is not
+consistent.
 
-Read the full log from the **first** error, not the last line — later errors are usually
-consequences. Then compare environments: version, dependency resolution, working directory,
-env vars, parallelism, ordering. Test ordering is a common one — CI's shuffle or sharding
-exposes shared state your local sequential run hides.
+Read the full log from the **first** error. Do not read only the last line. The subsequent
+errors are usually results of the first error.
 
-If it's genuinely flaky, that's a bug in the test, not weather. See
-[`root-cause`](../root-cause/SKILL.md) for measuring a failure rate rather than wishing at
-it.
+Then compare the conditions: the version, the dependencies, the working directory, the
+environment variables, the parallel jobs, and the sequence of the tests. The sequence is a
+usual cause. CI runs the tests in a different sequence, and this shows shared state that
+your system hides.
 
-## Going green honestly
+If the failure is not consistent, the test has a defect. See
+[`root-cause`](../root-cause/SKILL.md) for the method to measure a failure rate.
 
-Skipping a test, loosening a threshold, or adding `continue-on-error` makes the badge green
-without making the code correct. If a check has to be disabled to land, say so in the PR body
-in plain words, with why and what re-enables it. A silently skipped test is a test everyone
-believes is running.
+## Make the pipeline pass honestly
 
-## Report what ran
+A test that you disable, a limit that you reduce, or `continue-on-error` makes the pipeline
+green. It does not make the code correct.
 
-Command and result line, nothing invented:
+If you must disable a check to complete the work, write this in the pull request body. Give
+the reason and the condition that permits you to enable it again. A test that nobody
+disabled visibly is a test that all persons believe is running.
+
+## Report what you ran
+
+Give the command and the result line. Do not give a claim:
 
 ```
 make lint     → ok
@@ -104,6 +116,5 @@ pytest -q     → 214 passed, 3 skipped
 npm run build → built in 12.4s
 ```
 
-"CI should pass" is not a verification. If you couldn't run something — no credentials, no
-Docker, a job that only runs on the runner — say which and why, rather than implying
-coverage you don't have.
+"CI should pass" is not a verification. If you could not run a check, name the check and
+the reason. Do not imply a verification that you do not have.

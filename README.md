@@ -40,6 +40,7 @@ or not anyone remembers them:
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |
+| [`skills/context-budget/SKILL.md`](skills/context-budget/SKILL.md) | Read the smallest slice that answers the question. Search first. Do not read unchanged data two times. |
 | [`skills/write-docs/SKILL.md`](skills/write-docs/SKILL.md) | Docs you can act on: every command run for real, limits stated, updated in the same commit. |
 | [`skills/pr-description/SKILL.md`](skills/pr-description/SKILL.md) | PR bodies written for the reviewer: why, where to start reading, how it was verified, what's out of scope. |
 | [`skills/ci-verify/SKILL.md`](skills/ci-verify/SKILL.md) | Runs what the pipeline runs, on the commit you're about to push, before you push it. |
@@ -52,6 +53,19 @@ or not anyone remembers them:
 | [`hooks/install.sh`](hooks/install.sh) | Idempotent installer — symlinks, plus a non-destructive merge into `settings.json`. |
 | [`CHANGELOG.md`](CHANGELOG.md) | What each version does to your machine, what it costs, and how to uninstall. |
 | [`CODEX-REVIEW.md`](CODEX-REVIEW.md) | Codex's independent verdict on every skill, what changed because of it, and what was declined. |
+
+## The skill files use Simplified Technical English
+
+Every file in `skills/` is written in ASD-STE100 Simplified Technical English: short
+sentences, the active voice, one meaning for each word, and no metaphor. The purpose is an
+instruction that an agent cannot read in two ways.
+
+A rewrite into a controlled language loses content if nobody checks it. Each file was
+compared against its previous version, and the instructions that the first rewrite lost were
+put back. [`CODEX-REVIEW.md`](CODEX-REVIEW.md) records what was lost and what was restored.
+
+If you add a skill, keep the style: a maximum of 25 words for each sentence, a list for each
+enumeration, and the same word for the same thing.
 
 ## How the hook behaves
 

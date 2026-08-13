@@ -1,79 +1,91 @@
 ---
 name: review-changes
-description: Review a diff for defects that would actually bite — correctness, data loss, security, races — verifying each finding against the code before reporting it. Use when asked to "review this", "review my changes", "look over this diff", "is this correct", or before opening a pull request.
+description: Review a diff for defects that cause a failure: incorrect results, data loss, security faults, and race conditions. Verify each finding against the code before you report it. Use for "review this", "review my changes", "is this correct", or before a pull request.
 ---
 
 # Review changes
 
-A review is worth something only if a finding means "this breaks". Manufacture nothing.
+A review has value only when a finding shows a real failure. Do not report a finding that
+you cannot support.
 
-## 1. Get the real diff
+## 1. Get the correct diff
 
-`git diff --staged`, `git diff main...HEAD`, or the PR — establish the base explicitly, or
-you'll review changes that were already on the branch and miss the ones that weren't.
+Use `git diff --staged`, or `git diff main...HEAD`, or the pull request. Name the base
+commit. If you do not name the base, you will review changes that were already on the
+branch, and you will not see the new changes.
 
-## 2. Read past the diff
+## 2. Read more than the diff
 
-The diff shows changed lines, not the code that depends on them. Before judging a changed
-function, find its callers (`grep` the symbol) and read them. Most real defects live in the
-gap between what a function now does and what its existing callers still assume.
+The diff shows the changed lines. It does not show the code that uses those lines.
 
-Ask for each changed function: who calls this, what do they pass, and what do they do with
-what comes back?
+Before you judge a changed function, find each caller. Use `grep` with the name of the
+function. Read each caller. Most defects are in the difference between the new behavior of
+the function and the behavior that the callers expect.
 
-## 3. Rank by what it costs
+For each changed function, answer these questions:
 
-Report in this order, and spend your attention the same way:
+- Which code calls this function?
+- Which values does the caller send?
+- What does the caller do with the result?
 
-1. **Data loss, corruption, security.** Deletes the wrong thing, leaks a credential, trusts
-   unvalidated input at a boundary, widens permissions.
-2. **Correctness.** Wrong result, off-by-one, inverted condition, unhandled error path,
-   swallowed exception, wrong default.
-3. **Breaks under load or concurrency.** Race, deadlock, unbounded growth, leaked handle,
-   N+1 against a real dataset.
-4. **Contract breaks.** A caller, schema, or public signature that no longer holds.
-5. **Missing coverage** for logic that would fail silently.
+## 3. Put the findings in order of cost
 
-## 4. Verify before you report
+Report the findings in this sequence. Give your attention in the same sequence.
 
-For every candidate finding, try to refute it. Construct the concrete case: these inputs,
-this state, this wrong output or crash. Walk the actual code path — don't infer from the
-function's name.
+1. **Data loss, data corruption, and security.** The code deletes incorrect data, sends a
+   credential, accepts input at a trust boundary with no control, or gives more permission.
+2. **Incorrect results.** An incorrect value, an off-by-one error, an inverted condition, an
+   error path with no handler, an exception that the code catches and then ignores, or an
+   incorrect default value.
+3. **Failure with load or with concurrent use.** A race condition, a deadlock, unlimited
+   growth, an open handle, or a query for each row.
+4. **A broken contract.** A caller, a schema, or a public signature that is no longer
+   correct.
+5. **Absent tests** for logic that can fail with no message.
 
-If you can't produce a failing case, it isn't a finding — with one exception: a defect you
-can argue mechanically but not reproduce on demand (a race, a TOCTOU window, an unbounded
-retry). Report those as the mechanism plus the interleaving that triggers it, and label them
-as reasoned rather than reproduced.
+## 4. Verify a finding before you report it
 
-Everything else without a failing case: ask it as a question, or drop it. A confident wrong
-finding costs the author more time than silence would.
+For each possible finding, try to show that it is incorrect. Make the failure case: these
+inputs, this state, this incorrect result. Read the code path. Do not use the name of the
+function to make a conclusion.
 
-Run the tests and whatever static checks the repo has, and separate what this diff broke from
-what was already red. "Fails on main too" is information the author needs.
+If you cannot make a failure case, the item is not a finding. There is one exception. You
+can report a defect that you can show with a mechanism, but you cannot cause on demand.
+Examples: a race condition, a time-of-check-to-time-of-use window, or an unlimited retry.
+Report the mechanism and the sequence that causes it. Write that the finding is reasoned,
+not caused.
+
+For all other items with no failure case: ask a question, or remove the item. An incorrect
+finding costs the author more time than no finding.
+
+Run the tests and the static checks of the repository. Divide the failures that this diff
+caused from the failures that were already there. "This also fails on main" is data that
+the author needs.
 
 ## 5. Report
 
-Per finding, three lines at most:
+Use a maximum of three lines for each finding:
 
-- `path/to/file.ext:42` — where.
-- One sentence: what's broken.
-- The failure case: inputs → wrong behavior.
+- `path/to/file.ext:42` — the location.
+- One sentence: the defect.
+- The failure case: the inputs and the incorrect behavior.
 
-Most severe first. No summary of what the diff does — the author wrote it. No praise
-section. No count-padding.
+Put the most severe finding first. Do not summarize the diff. The author wrote it. Do not
+add a list of good points. Do not add findings to increase the count.
 
-**Don't report:** style, naming taste, formatting, "consider extracting this", hypothetical
-future requirements, or anything a linter owns. If the codebase's own conventions are
-broken, that's one line, at the bottom.
+**Do not report** these items: style, a preference for a name, a format, "you can extract
+this", a future requirement, or an item that a linter controls.
 
-## 6. Say when it's clean
+If the change does not obey the conventions of the repository, write one line at the end.
 
-If the diff is sound, say exactly that and stop. Inventing a marginal finding to look
-thorough trains the author to skim your reviews — which is what makes the real finding get
-missed later.
+## 6. Report that the diff is correct
+
+If the diff has no defect, write this and stop. Do not add a small finding to show
+thoroughness. A reviewer who adds unnecessary findings teaches the author to read the
+reviews quickly. Then the author does not see the important finding.
 
 ## Note
 
-This is the by-hand method. [`codex-check`](../codex-check/SKILL.md) is the other half:
-handing the same diff to an independent model so a second opinion is on record. They stack
-well — review first, then let Codex disagree with you.
+This is the manual method. [`codex-check`](../codex-check/SKILL.md) sends the same diff to
+an independent model, and puts that second opinion on the record. Use the two methods
+together. Do the manual review first.
