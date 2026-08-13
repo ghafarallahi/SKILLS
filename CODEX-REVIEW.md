@@ -80,6 +80,15 @@ question than about the skills. The findings inside it were still worth having.
    sink is called, not from an upstream filter) and supplied the business-logic abuse
    section the first draft lacked entirely.*
 3. **Release and deployment** — versioning, changelogs, migrations, rollout and rollback.
+   *Since added: [`release`](skills/release/SKILL.md), SOUND on the second round — Codex
+   caught that "steps 1–4 are individually reversible" overclaims (a backfill that overwrites
+   is a one-way door in reversible clothing) and supplied build-once/promote-the-same-digest,
+   which the draft omitted.*
+
+All three gaps are now closed. Each new skill went through the same loop: draft → Codex
+verdict → revision → confirmation. All three were NEEDS-WORK on the first pass, and in every
+case the finding was a real defect rather than a matter of taste — an unsafe `git stash`,
+a wrong claim about what makes a sink safe, and an overstated reversibility guarantee.
 
 Asked which existing skill is most valuable, it named `target`: "disciplined scoping and
 end-to-end execution make every specialized skill more effective."
