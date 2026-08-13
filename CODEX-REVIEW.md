@@ -75,7 +75,10 @@ question than about the skills. The findings inside it were still worth having.
    the second round — its first draft told you to `git stash -u` before running checks, which
    would have verified the base instead of the candidate.*
 2. **Security and dependency auditing** — vulnerabilities, exposed secrets, supply-chain
-   risk.
+   risk. *Since added: [`security-audit`](skills/security-audit/SKILL.md), SOUND on the second
+   round — Codex corrected "any unvalidated path is a finding" (safety comes from how the
+   sink is called, not from an upstream filter) and supplied the business-logic abuse
+   section the first draft lacked entirely.*
 3. **Release and deployment** — versioning, changelogs, migrations, rollout and rollback.
 
 Asked which existing skill is most valuable, it named `target`: "disciplined scoping and
