@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Read-only: this workflow runs a test suite, it has no reason to write anything.
+permissions:
+  contents: read
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned by commit SHA rather than the movable v4 tag — a tag can be
+      # re-pointed at other code by anyone who can write to that repo.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Show what the suite is running against
+        run: |
+          bash --version | head -1
+          git --version
+          jq --version
+
+      # No codex here on purpose: the suite stubs it, so the run stays offline,
+      # deterministic and free. One case deliberately runs with codex absent from
+      # PATH, which is exactly the runner's normal state.
+      - name: Run the self-test suite
+        run: bash hooks/selftest.sh
