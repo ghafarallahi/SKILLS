@@ -15,7 +15,7 @@ Restart Claude Code. From then on every turn that leaves changed files gets revi
 it can be called done — a rejection is fed back for a fix, not shown to you as a suggestion.
 
 ```bash
-bash ~/MyProject/SKILLS/hooks/selftest.sh   # 12 cases, offline, confirms it all works
+bash ~/MyProject/SKILLS/hooks/selftest.sh   # 17 cases, offline, confirms it all works
 ```
 
 [`install.sh`](hooks/install.sh) is idempotent and non-destructive: it skips anything that
@@ -75,11 +75,13 @@ costs a Codex run when there's something to look at.
 ## Install
 
 The repo is canonical; `~/.claude` holds symlinks to it. `install.sh` (see
-[Quick start](#quick-start)) creates four of them —
+[Quick start](#quick-start)) links every directory under `skills/` plus the two hook
+scripts the harness invokes —
 
 ```
-~/.claude/skills/codex-check      ~/.claude/hooks/codex-review.sh
-~/.claude/skills/target           ~/.claude/hooks/record-edit.sh
+~/.claude/skills/<every skill in skills/>
+~/.claude/hooks/codex-review.sh
+~/.claude/hooks/record-edit.sh
 ```
 
 — and adds one `PostToolUse` and one `Stop` entry to `~/.claude/settings.json`, backing the
@@ -91,8 +93,7 @@ for real.
 <summary>Doing it by hand instead</summary>
 
 ```bash
-ln -s ~/MyProject/SKILLS/skills/codex-check ~/.claude/skills/codex-check
-ln -s ~/MyProject/SKILLS/skills/target ~/.claude/skills/target
+for s in ~/MyProject/SKILLS/skills/*/; do ln -s "${s%/}" ~/.claude/skills/; done
 ln -s ~/MyProject/SKILLS/hooks/codex-review.sh ~/.claude/hooks/codex-review.sh
 ln -s ~/MyProject/SKILLS/hooks/record-edit.sh ~/.claude/hooks/record-edit.sh
 ```
@@ -136,20 +137,20 @@ Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and 
 bash hooks/selftest.sh
 ```
 
-Twelve cases — install and idempotent re-install, approve, reject, clean tree, the block
-cap, path recording, the non-git fallback, cap rollover, and both fail-open paths. It stubs
-`codex` and gives every case its own `TMPDIR` and `HOME`, so it's deterministic, offline,
-and costs nothing. Non-zero exit if anything fails.
+Seventeen cases covering both hooks, the installer, and `reset-count.sh`. Every case stubs
+`codex` and gets its own `TMPDIR` and `HOME`, so the suite is deterministic, offline, and
+costs nothing. Non-zero exit if anything fails.
 
 ```
 install
+  ok   the old settings.json is kept as .bak before it's rewritten
   ok   install links the files and wires both hooks
   ok   install is idempotent and keeps existing settings
-git repo
-  ok   approve is silent
-  ok   reject blocks the turn
+  ok   a skipped link fails loudly instead of reporting success
+  ok   empty skills/ makes no dangling link
   ...
-10 passed, 0 failed
+
+17 passed, 0 failed
 ```
 
 ### By hand
