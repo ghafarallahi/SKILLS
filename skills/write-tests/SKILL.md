@@ -10,13 +10,18 @@ description: Write tests that would actually catch the bug — proven by watchin
 A test written after the fix usually passes for the wrong reason. Before you trust a new
 test, run it against the broken code and watch it fail:
 
-- Testing a bug fix? Stash the fix, run the test, confirm it fails with a message that
-  names the real problem. Restore, confirm it passes.
+- Testing a bug fix? Revert the fix reversibly — `git stash`, a scratch worktree, or a copy
+  of the file — run the test, confirm it fails with a message that names the real problem,
+  then restore and confirm it passes. Never hand-edit the live file and trust yourself to
+  put it back.
 - Writing a test for existing code? Break that code deliberately — invert the condition,
   return the wrong default — and confirm the test goes red.
 
 A test that has never failed is an assertion about nothing. This is the only step here that
 can't be skipped.
+
+Run the whole suite before and after, and know which failures were already there. A case
+that goes green while three others turn red isn't progress.
 
 ## Test the failure paths
 

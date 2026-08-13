@@ -40,8 +40,16 @@ For every candidate finding, try to refute it. Construct the concrete case: thes
 this state, this wrong output or crash. Walk the actual code path — don't infer from the
 function's name.
 
-If you can't produce a failing case, it isn't a finding. Ask it as a question, or drop it.
-A confident wrong finding costs the author more time than silence would.
+If you can't produce a failing case, it isn't a finding — with one exception: a defect you
+can argue mechanically but not reproduce on demand (a race, a TOCTOU window, an unbounded
+retry). Report those as the mechanism plus the interleaving that triggers it, and label them
+as reasoned rather than reproduced.
+
+Everything else without a failing case: ask it as a question, or drop it. A confident wrong
+finding costs the author more time than silence would.
+
+Run the tests and whatever static checks the repo has, and separate what this diff broke from
+what was already red. "Fails on main too" is information the author needs.
 
 ## 5. Report
 

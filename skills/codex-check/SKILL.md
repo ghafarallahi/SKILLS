@@ -34,6 +34,15 @@ git diff HEAD > /tmp/codex-review.diff
    - **REJECT** → fix the named issues, re-run step 2. Max 3 rounds, then report the remaining disagreement to the user instead of looping.
    - **Codex errors / not installed** → say so plainly ("codex unavailable: <error>, work is unverified") and do not claim it was confirmed.
 
+## Before you send it
+
+The diff leaves your machine. Don't send secrets: skip or redact `.env` files, key material,
+tokens, customer data, and anything the repo's own ignore rules exclude. If the change is in
+a file that carries credentials, review it yourself instead.
+
+Send test and check results alongside the diff, not the diff alone — "it looks right" from a
+model that never ran the suite is weaker than the suite's own answer.
+
 ## Rules
 
 - Never report success on a REJECT.

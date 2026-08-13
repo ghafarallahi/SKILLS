@@ -37,11 +37,13 @@ or not anyone remembers them:
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/write-docs/SKILL.md`](skills/write-docs/SKILL.md) | Docs you can act on: every command run for real, limits stated, updated in the same commit. |
+| [`skills/pr-description/SKILL.md`](skills/pr-description/SKILL.md) | PR bodies written for the reviewer: why, where to start reading, how it was verified, what's out of scope. |
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
 | [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for the hooks and the installer. Stub `codex`, throwaway repos, no network. |
 | [`hooks/install.sh`](hooks/install.sh) | Idempotent installer — symlinks, plus a non-destructive merge into `settings.json`. |
+| [`CODEX-REVIEW.md`](CODEX-REVIEW.md) | Codex's independent verdict on every skill, what changed because of it, and what was declined. |
 
 ## How the hook behaves
 

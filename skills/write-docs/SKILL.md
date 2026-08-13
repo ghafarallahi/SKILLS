@@ -26,9 +26,18 @@ after that has already decided.
 Every block a reader might paste gets executed first, in a clean state if the doc claims a
 clean state. Paste the real output, not a plausible rendering of it.
 
+Three exceptions: commands that destroy data or cost money, commands needing credentials
+you shouldn't exercise casually, and privileged or production-touching operations (`sudo`,
+anything pointed at live infrastructure). Don't run those — mark them clearly as
+unverified and say what they'll do. Everything else gets run.
+
 Untested command blocks are the single biggest source of broken docs — a flag that changed,
 a path that only exists on your machine, a step you do from muscle memory and forgot to
 write down.
+
+State the prerequisites the commands assume — versions, credentials, platform, an already
+running service. A block that works only on your machine reads identical to one that works
+everywhere.
 
 ## Document the limits
 

@@ -13,8 +13,17 @@ Before theorizing, get a command that fails every time you run it. Write it down
 after this depends on being able to ask "is it still broken?" and get a trustworthy answer
 in seconds.
 
-Can't reproduce it? That's the whole problem now — chase conditions (environment, ordering,
-timing, data) until you can. A fix you can't observe failing first is a guess.
+Can't reproduce it every time? Then measure it: run it N times, record the failure rate, and
+make that number your instrument. A bug that fails 3 runs in 100 is reproducible enough —
+you just need enough trials to tell a real change from noise, and to know that one green run
+proves nothing.
+
+Compare like with like: same trial count before and after, quoted as a fraction — `6/200
+before, 0/200 after`. For a bug that fails ~3% of the time, a handful of green runs is
+noise; you need enough trials that zero failures would be surprising.
+
+Chase the conditions (environment, ordering, timing, concurrency, data) that move the rate.
+A fix you can't observe changing that rate is a guess.
 
 ## 2. Read the actual error
 

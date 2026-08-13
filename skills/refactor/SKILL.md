@@ -5,8 +5,13 @@ description: Change structure without changing behavior — green tests before y
 
 # Refactor
 
-Behavior-preserving by definition. The moment behavior changes it stops being a refactor and
-becomes a rewrite — which is fine, but say so and commit it separately.
+Behavior-preserving by definition. The moment behavior changes it stops being a refactor —
+which is fine, but say so and commit it separately.
+
+Behavior means everything observable from outside: return values, public signatures, error
+types, side effects, output format, and — where anyone depends on it — performance and
+memory. A green unit suite doesn't cover most of that. Ask who consumes this and what they'd
+notice.
 
 ## Name the pain first
 
@@ -49,7 +54,9 @@ The highest-value refactor is removal, and it needs no design:
 - An interface with one implementation, a factory for one product, a wrapper that only
   forwards.
 
-Deleting is also the safest change to verify: it either still passes or it doesn't.
+Deleting is also the easiest change to verify — it either still passes or it doesn't — with
+one exception: removing anything externally visible (a public export, a CLI flag, a response
+field) is a behavior change, not a refactor, however unused it looks from in here.
 
 ## Rule of three
 

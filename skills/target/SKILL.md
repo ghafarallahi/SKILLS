@@ -48,7 +48,16 @@ stall the whole run on one blocked item.
 authorized — pushing, publishing, deleting, sending, spending. "Run to the end" is
 permission to skip check-ins, not permission to take those actions unasked.
 
-## 4. Report once, at the end
+## 4. Verify before you report
+
+Run whatever the repo uses to tell you it works — the suite, the linter, the build — and
+check the result against what was actually asked, step by step. A run that ends without
+that check is a run that reports intentions.
+
+Keep the evidence: the command and its result line go in the report, not a claim that it
+passed.
+
+## 5. Report once, at the end
 
 - What got done, what didn't, and why.
 - Every assumption you made instead of asking.

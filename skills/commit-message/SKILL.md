@@ -32,7 +32,9 @@ Skip it for genuinely trivial commits (a typo, a version bump). Otherwise wrap a
 answer what the diff can't:
 
 - **Why.** The diff shows what changed; it can't show the failure mode you hit, the
-  alternative you rejected, or the constraint that forced the shape.
+  alternative you rejected, or the constraint that forced the shape. If you don't actually
+  know the why — no issue, no conversation, no evidence in the history — ask, or leave it
+  out. An invented rationale is worse than a bare subject line.
 - **Decisions with a cost.** A deliberate limit, a known ceiling, a shortcut and its
   upgrade path.
 - **Verification** — but only what you actually ran. See below.
