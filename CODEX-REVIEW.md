@@ -71,7 +71,9 @@ question than about the skills. The findings inside it were still worth having.
 ## Gaps Codex identified in the set
 
 1. **CI/build verification** — tests, lint, type checks and build in a reproducible
-   environment before merge.
+   environment before merge. *Since added: [`ci-verify`](skills/ci-verify/SKILL.md), SOUND on
+   the second round — its first draft told you to `git stash -u` before running checks, which
+   would have verified the base instead of the candidate.*
 2. **Security and dependency auditing** — vulnerabilities, exposed secrets, supply-chain
    risk.
 3. **Release and deployment** — versioning, changelogs, migrations, rollout and rollback.

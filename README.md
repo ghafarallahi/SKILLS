@@ -38,6 +38,7 @@ or not anyone remembers them:
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/write-docs/SKILL.md`](skills/write-docs/SKILL.md) | Docs you can act on: every command run for real, limits stated, updated in the same commit. |
 | [`skills/pr-description/SKILL.md`](skills/pr-description/SKILL.md) | PR bodies written for the reviewer: why, where to start reading, how it was verified, what's out of scope. |
+| [`skills/ci-verify/SKILL.md`](skills/ci-verify/SKILL.md) | Runs what the pipeline runs, on the commit you're about to push, before you push it. |
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
