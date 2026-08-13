@@ -36,6 +36,7 @@ or not anyone remembers them:
 | [`skills/write-tests/SKILL.md`](skills/write-tests/SKILL.md) | Tests proven to fail against the broken code first — otherwise they pass for the wrong reason. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
+| [`skills/write-docs/SKILL.md`](skills/write-docs/SKILL.md) | Docs you can act on: every command run for real, limits stated, updated in the same commit. |
 | [`hooks/codex-review.sh`](hooks/codex-review.sh) | A `Stop` hook. Runs on **every** turn end, no discretion involved. |
 | [`hooks/record-edit.sh`](hooks/record-edit.sh) | A `PostToolUse` hook that logs which files got written, so the review works outside git. |
 | [`hooks/reset-count.sh`](hooks/reset-count.sh) | Clears the per-session block counters so the hook will block again. |
