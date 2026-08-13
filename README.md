@@ -36,6 +36,7 @@ or not anyone remembers them:
 | [`skills/write-tests/SKILL.md`](skills/write-tests/SKILL.md) | Tests proven to fail against the broken code first — otherwise they pass for the wrong reason. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
+| [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |
 | [`skills/write-docs/SKILL.md`](skills/write-docs/SKILL.md) | Docs you can act on: every command run for real, limits stated, updated in the same commit. |
 | [`skills/pr-description/SKILL.md`](skills/pr-description/SKILL.md) | PR bodies written for the reviewer: why, where to start reading, how it was verified, what's out of scope. |
 | [`skills/ci-verify/SKILL.md`](skills/ci-verify/SKILL.md) | Runs what the pipeline runs, on the commit you're about to push, before you push it. |
