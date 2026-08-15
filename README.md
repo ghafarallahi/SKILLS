@@ -1,14 +1,14 @@
 # SKILLS
 
+> This repository moved here from `rekopad/SKILLS`, which is now archived and read-only.
+> Same history, same tags. Update your remote with
+> `git remote set-url origin https://github.com/ghafarallahi/SKILLS.git`.
+
 [![release](https://img.shields.io/github/v/release/ghafarallahi/SKILLS)](https://github.com/ghafarallahi/SKILLS/releases/latest)
 [![tests](https://github.com/ghafarallahi/SKILLS/actions/workflows/tests.yml/badge.svg)](https://github.com/ghafarallahi/SKILLS/actions/workflows/tests.yml)
 
 Claude Code customizations that make an independent model — OpenAI's Codex — confirm work
 before it's reported as done. Claude doesn't self-certify.
-
-> This repository moved here from `rekopad/SKILLS`, which is now archived and read-only.
-> Same history, same tags. Update your remote with
-> `git remote set-url origin https://github.com/ghafarallahi/SKILLS.git`.
 
 ## Quick start
 
