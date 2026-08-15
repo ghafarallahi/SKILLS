@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.2.1
+
+The repository moved. No code changed — this release exists so the move is recorded
+somewhere other than a commit message.
+
+### If you already cloned it
+
+Point your remote at the new location:
+
+```bash
+git remote set-url origin https://github.com/ghafarallahi/SKILLS.git
+```
+
+The previous location, `rekopad/SKILLS`, is archived and read-only. It keeps working for
+reading and cloning, so nothing breaks if you do not do this — but it will never receive
+another commit. Its README points here.
+
+### Changed
+
+- The README badges, the clone command in Quick start, and the release and workflow links
+  now name the new repository. Following the old ones would have shown you the archived
+  copy's release and CI status.
+- A notice at the top of the README records the move.
+
+### Unchanged
+
+Every skill, both hooks, the installer, and the 17 test cases are byte-for-byte identical to
+v0.2.0. An existing install needs nothing.
+
 ## v0.2.0
 
 Two new skills, and every skill file rewritten in Simplified Technical English.
