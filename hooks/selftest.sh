@@ -360,7 +360,42 @@ case_record_ignores_pathless() {
   rm -rf "$t"
 }
 
+case_relnotes() {
+  local t
+  t=$(mktemp -d)
+  cat >"$t/CHANGELOG.md" <<'MD'
+# Changelog
+
+## v2.0.0
+
+Second version.
+
+### Details
+
+More text.
+
+## v1.0.0
+
+First version.
+MD
+  local out first last rc
+  out=$(bash "$HOOKS/relnotes.sh" v2.0.0 "$t/CHANGELOG.md")
+  first=$(printf '%s' "$out" | sed -n '1p')
+  last=$(printf '%s' "$out" | sed -n '$p')
+  bash "$HOOKS/relnotes.sh" v9.9.9 "$t/CHANGELOG.md" >/dev/null 2>&1
+  rc=$?
+  if [ "$first" = "Second version." ] && [ "$last" = "More text." ] &&
+    ! printf '%s' "$out" | grep -q 'First version.' && [ "$rc" -ne 0 ]; then
+    ok "relnotes cuts one section, with no blank first or last line"
+  else
+    bad "relnotes cuts one section, with no blank first or last line" \
+      "first='$first' last='$last' unknown-version-exit=$rc"
+  fi
+  rm -rf "$t"
+}
+
 echo "install"
+case_relnotes
 case_install_backs_up
 case_install_fresh
 case_install_idempotent
