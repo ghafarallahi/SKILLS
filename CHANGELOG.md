@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.2.2
+
+A maintenance script for this repository. Nothing that you install changes.
+
+### Added
+
+- `hooks/relnotes.sh` cuts one version's section out of this changelog, for use as GitHub
+  release notes. Every release before this one retyped an `awk` one-liner to do the same
+  thing, and one of those retypings left a blank first line in three published releases.
+
+  ```bash
+  bash hooks/relnotes.sh v0.2.2
+  ```
+
+  It ends the section at the next `## version` heading but keeps `###` sub-headings, and it
+  exits 1 for a version it cannot find. An empty release body would publish with no error
+  and nobody would see that the notes were missing.
+
+### Unchanged
+
+Every skill, both installed hooks, and the installer are byte-for-byte identical to v0.2.1.
+An existing install needs nothing. `relnotes.sh` is not linked into `~/.claude`; it is a
+tool for maintaining this repository.
+
+### Tests
+
+18 cases, up from 17. The new case asserts four behaviors of `relnotes.sh`, and each was
+broken separately to confirm the case fails when it should.
+
 ## v0.2.1
 
 The repository moved. No code changed — this release exists so the move is recorded
