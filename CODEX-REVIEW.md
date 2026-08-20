@@ -90,6 +90,20 @@ verdict → revision → confirmation. All three were NEEDS-WORK on the first pa
 case the finding was a real defect rather than a matter of taste — an unsafe `git stash`,
 a wrong claim about what makes a sink safe, and an overstated reversibility guarantee.
 
+## The manager skill
+
+`manager` (added 2026-08-15) went through the same loop. Round 1: NEEDS-WORK — the
+smaller-tier-first rule invited predictable failures, and there was no cost ceiling; both
+were corrected (tier matched to task type first; a budget with a stop-and-ask threshold at
+twice the estimate). Round 2: SOUND.
+
+The Stop hook later rejected it for naming a "nonexistent Workflow tool". That finding is
+incorrect for this machine — the Workflow feature's accepted-usage marker sits in the local
+settings, and the tool is in the live session schema — but it is correct for harnesses
+where the plan-gated tool is absent. The skill now conditions on availability and gives the
+Agent-tool fallback, so it is correct on both kinds of harness. Verified rather than
+accepted, in both directions.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
