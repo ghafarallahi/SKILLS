@@ -1,5 +1,53 @@
 # Changelog
 
+## v0.3.0
+
+One new skill: `manager`. The session model coordinates a project instead of writing all of
+it.
+
+### Upgrade
+
+Re-run the installer. It links the new skill; it changes nothing else.
+
+```bash
+cd ~/MyProject/SKILLS && git pull && bash hooks/install.sh
+```
+
+### New: the manager skill
+
+For a project with more than one part, the session model becomes the manager. It divides
+the work into small tasks, sends each task to the least expensive model that can do it
+correctly, and verifies every result before integration. The user gets one notification
+when the verified whole is ready for their final test.
+
+The rules that control the cost and the correctness:
+
+- A worker's report is data, not proof. The manager runs each task's check itself.
+- A budget is set at the plan. When the total reaches twice the estimate, the manager
+  stops and asks.
+- Delivery waits for an independent Codex approval: the codex-review hook when it is
+  installed, a manual `codex-check` run when it is not.
+- A task smaller than its brief is not delegated. Small projects cost less without a
+  manager.
+
+The delegation mechanic was tested live before the skill was written: a `haiku` worker ran
+this repository's test suite and reported `18 passed, 0 failed` for approximately 36K
+tokens — approximately one tenth of the manager tier's price for each token.
+
+To make the manager the default on your machine, add one line to your `~/.claude/CLAUDE.md`:
+
+```
+For any project or feature with more than one part, apply the `manager` skill.
+```
+
+The skill file conditions on tool availability: with the Workflow tool it runs pipelines,
+without it it runs grouped Agent-tool batches. It works on both kinds of harness.
+
+### Unchanged
+
+Every other skill, both installed hooks, the installer, and the 18 test cases are
+byte-for-byte identical to v0.2.2.
+
 ## v0.2.2
 
 A maintenance script for this repository. Nothing that you install changes.
