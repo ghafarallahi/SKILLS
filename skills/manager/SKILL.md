@@ -86,6 +86,33 @@ A brief that omits the check produces work that only looks complete.
   one directory write over each other.
 - A worker that returns nothing failed. Treat an empty result as a failed verification.
 
+## Report the progress
+
+Give the user a short status block after each change of state. A change of state: the plan
+is set, a worker starts, a result passes or fails its verification, the integration starts,
+the project is ready.
+
+The format, with one line for each task and a maximum of approximately eight lines:
+
+```
+[manager] 3 tasks · budget 250K · spent 128K
+  done    1. check script     sonnet   verified
+  active  2. selftest case    sonnet   running
+  queued  3. README row       manager
+```
+
+- The states are: queued, active, done, failed, escalated.
+- Show the model and the verification state for each task. Show the spent tokens against
+  the budget.
+- For a plan with more than 8 tasks, show the counts for each state, plus one line for
+  each active or failed task only.
+- For a plan with more than 5 tasks, post a block when a group completes or a task fails,
+  not at each transition.
+- Put no detail in the block. The detail goes in the final report.
+- Do not post a block when nothing changed.
+- This block is chat text. It is not the notification of section 7. The push notification
+  stays one, and it comes only after the final verification.
+
 ## 5. Verify every result
 
 A worker's report is data. It is not proof. For each result:
