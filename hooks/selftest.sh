@@ -394,6 +394,39 @@ MD
   rm -rf "$t"
 }
 
+case_check_readme() {
+  local t
+  t=$(mktemp -d)
+  mkdir -p "$t/skills/alpha" "$t/skills/beta"
+  touch "$t/skills/alpha/SKILL.md" "$t/skills/beta/SKILL.md"
+  cat >"$t/README.md" <<'MD'
+[skills/alpha/SKILL.md](skills/alpha/SKILL.md)
+[skills/beta/SKILL.md](skills/beta/SKILL.md)
+MD
+  local clean_out clean_rc
+  clean_out=$(bash "$HOOKS/check-readme.sh" "$t" 2>&1)
+  clean_rc=$?
+
+  mkdir -p "$t/skills/gamma"
+  touch "$t/skills/gamma/SKILL.md"
+  # gamma's label names the path but the link goes elsewhere — must count as missing
+  printf '[skills/gamma/SKILL.md](https://example.com)\n' >>"$t/README.md"
+  printf '[skills/gone/SKILL.md](skills/gone/SKILL.md)\n' >>"$t/README.md"
+  local dirty_out dirty_rc
+  dirty_out=$(bash "$HOOKS/check-readme.sh" "$t" 2>&1)
+  dirty_rc=$?
+
+  if [ "$clean_rc" -eq 0 ] && [ -z "$clean_out" ] && [ "$dirty_rc" -eq 1 ] &&
+    printf '%s' "$dirty_out" | grep -q 'missing row: gamma' &&
+    printf '%s' "$dirty_out" | grep -q 'stale row: gone'; then
+    ok "check-readme flags missing and stale rows, silent when consistent"
+  else
+    bad "check-readme flags missing and stale rows, silent when consistent" \
+      "clean: exit=$clean_rc out='$clean_out'; dirty: exit=$dirty_rc out='$dirty_out'"
+  fi
+  rm -rf "$t"
+}
+
 echo "install"
 case_relnotes
 case_install_backs_up
@@ -419,6 +452,9 @@ case_cap_rollover
 echo "fails open"
 case_no_codex
 case_no_verdict
+
+echo "readme"
+case_check_readme
 
 printf '\n%s passed, %s failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

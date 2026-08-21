@@ -22,7 +22,7 @@ Restart Claude Code. From then on every turn that leaves changed files gets revi
 it can be called done — a rejection is fed back for a fix, not shown to you as a suggestion.
 
 ```bash
-bash ~/MyProject/SKILLS/hooks/selftest.sh   # 18 cases, offline, confirms it all works
+bash ~/MyProject/SKILLS/hooks/selftest.sh   # 19 cases, offline, confirms it all works
 ```
 
 [`install.sh`](hooks/install.sh) is idempotent and non-destructive: it skips anything that
@@ -57,6 +57,7 @@ or not anyone remembers them:
 | [`hooks/selftest.sh`](hooks/selftest.sh) | Regression check for the hooks and the installer. Stub `codex`, throwaway repos, no network. |
 | [`hooks/install.sh`](hooks/install.sh) | Idempotent installer — symlinks, plus a non-destructive merge into `settings.json`. |
 | [`hooks/relnotes.sh`](hooks/relnotes.sh) | Cuts one version's section out of the changelog for release notes. Exits 1 rather than emit an empty body. |
+| [`hooks/check-readme.sh`](hooks/check-readme.sh) | Verifies this table and `skills/` agree: every skill has a row, every row's link target exists. |
 | [`CHANGELOG.md`](CHANGELOG.md) | What each version does to your machine, what it costs, and how to uninstall. |
 | [`CODEX-REVIEW.md`](CODEX-REVIEW.md) | Codex's independent verdict on every skill, what changed because of it, and what was declined. |
 
@@ -167,7 +168,7 @@ Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and 
 bash hooks/selftest.sh
 ```
 
-Eighteen cases covering both hooks, the installer, `reset-count.sh`, and `relnotes.sh`. Every case stubs
+Nineteen cases covering both hooks, the installer, `reset-count.sh`, `relnotes.sh`, and `check-readme.sh`. Every case stubs
 `codex` and gets its own `TMPDIR` and `HOME`, so the suite is deterministic, offline, and
 costs nothing. Non-zero exit if anything fails.
 
@@ -180,7 +181,7 @@ install
   ok   a skipped link fails loudly instead of reporting success
   ...
 
-18 passed, 0 failed
+19 passed, 0 failed
 ```
 
 ### By hand
