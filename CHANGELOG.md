@@ -1,5 +1,38 @@
 # Changelog
 
+## v0.3.1
+
+The manager reports progress while it runs, and the repository checks its own README.
+
+### Upgrade
+
+```bash
+cd ~/MyProject/SKILLS && git pull
+```
+
+No reinstall. The `manager` skill directory is already linked, so the pull alone updates
+it. `check-readme.sh` is repository tooling and is not linked.
+
+### Changed
+
+- **`manager`** — a short status block after each change of state: one line per task with
+  its model and verification state, and the spent tokens against the budget. Past 5 tasks
+  it posts per group, not per transition; past 8 tasks it shows state counts. The block is
+  chat text; the single push notification still comes only after the final verification.
+
+### Added
+
+- **`hooks/check-readme.sh`** — fails when a skill directory has no README row, or a README
+  row links to a skill that does not exist. The check matches link targets, not raw text,
+  so a row that names the path but links elsewhere is caught. It was the manager skill's
+  first real run: two `sonnet` workers built the script and its test in parallel for
+  approximately 128K worker tokens, and the mid-run Codex review caught a specification
+  defect in the manager's own brief.
+
+### Tests
+
+19 cases, up from 18.
+
 ## v0.3.0
 
 One new skill: `manager`. The session model coordinates a project instead of writing all of
