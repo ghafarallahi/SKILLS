@@ -38,11 +38,14 @@ weaker answer than the tests give.
 2. Run Codex. Codex must not run interactively:
 
 ```bash
-codex exec "Review this work. The request was: <the words of the user, with no change>. The changed files are: <paths>.
-Read the files. Answer with a first line of APPROVE or REJECT. Then give the reasons.
-Reject for these faults: the work does not do what the request asked, a defect, incorrect
-syntax, an incorrect path, or a missing requirement."
+codex exec </dev/null "Review this work. The request was: <the words of the user, with no change>.
+The changed files are: <paths>. Read the files. Answer with a first line of APPROVE or
+REJECT. Then give the reasons. Reject for these faults: the work does not do what the
+request asked, a defect, incorrect syntax, an incorrect path, or a missing requirement."
 ```
+
+Redirect stdin from `/dev/null`. Without it, `codex exec` waits for input that never comes,
+and the review never finishes. Set a timeout on the call.
 
 3. Act on the answer:
    - **APPROVE** — report that the work is complete. Quote the verdict.
