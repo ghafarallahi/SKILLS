@@ -24,6 +24,11 @@ Find the lines first. Then read only those lines.
 A full read of a file with 2000 lines costs approximately 25000 tokens. A `grep` for the
 same symbol costs approximately 200 tokens.
 
+Use the index before the file system. Many projects have a search index or a structural
+tool: `smart_search`, `smart_outline`, a code graph, `rg`. Ask the tool for the location.
+Then read the location. An index answers the question "where" for a few hundred tokens. A
+directory walk answers it for many thousands.
+
 ## 2. Read a slice, not a file
 
 Use `offset` and `limit`. Start with 100 lines around the match.
@@ -74,6 +79,20 @@ Use a subagent when these conditions are true:
 - You need the conclusion. You do not need the text of the files.
 
 Do not use a subagent for one known file. The subagent costs more than the read.
+
+## 5a. Read the digest, not the source
+
+When a file is needed only for its interface, read the interface: `grep` the exports, the
+signatures, and the types. Do not read the body to learn the shape.
+
+Some facts are needed many times: by you across turns, or by several workers. Write those
+facts one time in one file. Then read that file.
+
+A digest names the commit or the date that it describes. Before you change code on the
+strength of a fact from a digest, `grep` the current source for that fact. When the source
+changes, refresh the digest. A digest that nobody refreshes is wrong within a week. Organize at storage time, once;
+do not reorganize at each retrieval. A manager run writes a context pack for this reason
+(see [`manager`](../manager/SKILL.md)).
 
 ## 6. Keep the facts, discard the data
 

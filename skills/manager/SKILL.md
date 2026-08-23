@@ -62,6 +62,45 @@ Set the budget at the plan, before the first worker starts:
 
 A manager without a budget converts every planning error into cost.
 
+## Prove the baseline before the first worker
+
+Workers rediscover what the manager did not verify, and each one pays for the discovery.
+Before the first worker starts:
+
+- Run the test command, the type check, and the build one time on the bare project.
+- Write one trivial test of the kind the workers will write — one screen, one endpoint — and
+  make it pass. This finds the test stack's real API, its mocks, and its file rules.
+- Record each fact that this finds in the context pack below.
+
+A baseline gap that five workers find five times costs five times. Found one time by the
+manager, it costs one time.
+
+## Write one context pack
+
+Each worker reads the same six files and makes the same discoveries. Write the digest one
+time; workers read the digest. Put it in one file at the root of the project, for example
+`CONTEXT-PACK.md`, and name it in each brief. It contains:
+
+- The fixed interfaces: the types and the signatures that the tasks share, in full.
+- The conventions of the codebase, in ten lines or fewer, with one example file to copy.
+- The verified baseline: the exact test, type-check, and build commands, with their result.
+- The file rules: which directories have special meaning, and where each kind of file goes.
+- The traps found during the baseline: API versions, mocks, paths.
+- The file ownership map: which task owns which files.
+
+A worker reads the pack, then reads only the files that it must change. It does not read a
+file to learn a convention that the pack states. Keep the pack under two hundred lines; a
+digest that needs its own digest is a source file.
+
+A digest goes stale. Three rules keep it true:
+
+- The first line of the pack names the commit that it describes.
+- The manager refreshes the pack after each change to an interface, a convention, or the
+  baseline, before the next worker starts. A pack that is older than the code is a trap.
+- Before a worker changes a file, it checks the pack's statement about that file against
+  the file: `grep` the signature or the export. A mismatch is a failed task for the
+  manager, not a guess for the worker.
+
 ## 3. Brief each worker
 
 A worker starts empty. It does not see this conversation. Each brief must contain:
@@ -69,7 +108,9 @@ A worker starts empty. It does not see this conversation. Each brief must contai
 - The goal, and the check that defines success.
 - The exact file paths, and the part of each file that matters.
 - The constraints: the style of the codebase, the files that the worker must not touch.
-- The output format that you need back.
+- The output format that you need back: result lines, not logs. A worker that returns a
+  log makes the manager pay to read it.
+- The name of the context pack, and the instruction to read it first.
 
 A brief that omits the check produces work that only looks complete.
 
