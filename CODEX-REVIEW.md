@@ -104,6 +104,16 @@ where the plan-gated tool is absent. The skill now conditions on availability an
 Agent-tool fallback, so it is correct on both kinds of harness. Verified rather than
 accepted, in both directions.
 
+The context-pack additions (2026-08-23) went through the loop again. Round 1: NEEDS-WORK —
+a digest without provenance goes stale; the pack now names its commit, the manager
+refreshes it after interface changes, and workers verify pack facts with `grep`. Round 2:
+SOUND. A month later a newer Codex model re-reviewed the same commit and found a P2 the
+older model missed: workers were permitted to read only the files they change, so a stale
+pack fact about a dependency's signature was unverifiable. The fix permits a targeted
+`grep` of a fact's defining source, including files the worker must not change. Verdict on
+the fix: APPROVE. Two lessons: a reviewer upgrade is a reason to re-review, and a read
+restriction must never forbid the check that another rule requires.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

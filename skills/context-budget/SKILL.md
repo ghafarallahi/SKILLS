@@ -89,8 +89,9 @@ Some facts are needed many times: by you across turns, or by several workers. Wr
 facts one time in one file. Then read that file.
 
 A digest names the commit or the date that it describes. Before you change code on the
-strength of a fact from a digest, `grep` the current source for that fact. When the source
-changes, refresh the digest. A digest that nobody refreshes is wrong within a week. Organize at storage time, once;
+strength of a digest fact, `grep` that fact at the source that defines it. The defining
+source can be a dependency or a caller; a targeted `grep` there is not a repeated read.
+When the source changes, refresh the digest. A digest that nobody refreshes is wrong within a week. Organize at storage time, once;
 do not reorganize at each retrieval. A manager run writes a context pack for this reason
 (see [`manager`](../manager/SKILL.md)).
 

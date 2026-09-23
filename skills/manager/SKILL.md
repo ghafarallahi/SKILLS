@@ -88,8 +88,9 @@ time; workers read the digest. Put it in one file at the root of the project, fo
 - The traps found during the baseline: API versions, mocks, paths.
 - The file ownership map: which task owns which files.
 
-A worker reads the pack, then reads only the files that it must change. It does not read a
-file to learn a convention that the pack states. Keep the pack under two hundred lines; a
+A worker reads the pack, then reads the files that it must change. It may also `grep` a
+file that it must not change, to verify a pack fact (see the rules below). It does not
+read a file to learn a convention that the pack states. Keep the pack under two hundred lines; a
 digest that needs its own digest is a source file.
 
 A digest goes stale. Three rules keep it true:
@@ -97,9 +98,10 @@ A digest goes stale. Three rules keep it true:
 - The first line of the pack names the commit that it describes.
 - The manager refreshes the pack after each change to an interface, a convention, or the
   baseline, before the next worker starts. A pack that is older than the code is a trap.
-- Before a worker changes a file, it checks the pack's statement about that file against
-  the file: `grep` the signature or the export. A mismatch is a failed task for the
-  manager, not a guess for the worker.
+- Before a worker acts on a pack fact, it checks that fact at its defining source:
+  `grep` the signature or the export there. This rule applies also to a dependency that
+  the worker must not change. A targeted `grep` of that file is permitted; a full read is
+  not. A mismatch is a failed task for the manager, not a guess for the worker.
 
 ## 3. Brief each worker
 
