@@ -114,6 +114,18 @@ pack fact about a dependency's signature was unverifiable. The fix permits a tar
 the fix: APPROVE. Two lessons: a reviewer upgrade is a reason to re-review, and a read
 restriction must never forbid the check that another rule requires.
 
+## The minimal-code skill
+
+`minimal-code` (added 2026-10-03) is a rewrite of the third-party "ponytail" plugin for
+this system: the solution ladder, the over-engineering review tags, the ceiling-marker
+debt convention, and the report discipline — without the persona, the intensity levels,
+or the benchmark scoreboard, and in STE. Codex compared it against the original.
+Round 1: NEEDS-WORK, five real losses — review/design/library triggers, the shared-cause
+correction rule, the marker's required replacement, the trivial-one-liner test exemption,
+and an ambiguous "read each file" that contradicted `context-budget`. All five were
+restored or disambiguated. Round 2: SOUND, no new contradiction. The STE lesson held a
+second time: a rewrite loses content, and only a comparison against the source finds it.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
