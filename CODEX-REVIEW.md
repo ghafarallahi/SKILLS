@@ -160,6 +160,17 @@ swallowed `cd` error let the Stop hook review whatever directory it ran from. Th
 was written first and failed against the unfixed hook; the fix is one guarded exit, by
 stated decision. Codex: APPROVE. Suite: 20 passed, 0 failed.
 
+Chain test (2026-10-03), one real feature on the Foobia app: `design-decision` wrote
+row #14 (an in-app due card; notifications rejected because they cannot be verified on
+this machine), `verify-api` grounded the pack in installed interfaces, the manager
+proved the baseline and briefed two workers off one context pack, `minimal-code` kept
+the change to a pure selector plus one card with zero new dependencies, and the
+`write-tests` rules held (fixed clocks, mutation-proven tests, placement outside the
+routes directory). Codex rejected round 1 with two real integration defects —
+stale-on-foreground and a card outside the scroll container — and approved round 2.
+Worker tokens: ≈186K for the feature; the pack held and neither worker re-read sources
+the pack already carried.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
