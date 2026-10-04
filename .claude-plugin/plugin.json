@@ -1,0 +1,10 @@
+{
+  "name": "codex-skills",
+  "version": "0.4.0",
+  "description": "Coding skills plus a Stop hook that makes OpenAI's Codex confirm work before it is reported done. Claude does not self-certify.",
+  "author": {
+    "name": "Alireza",
+    "url": "https://github.com/ghafarallahi"
+  },
+  "hooks": "./hooks/hooks.json"
+}

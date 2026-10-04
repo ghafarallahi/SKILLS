@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "skills",
+  "description": "Claude Code customizations that make an independent model - OpenAI's Codex - confirm work before it is reported done.",
+  "owner": {
+    "name": "Alireza",
+    "url": "https://github.com/ghafarallahi"
+  },
+  "plugins": [
+    {
+      "name": "codex-skills",
+      "description": "18 coding skills plus an enforcing Stop hook: Codex reviews every turn that leaves changed files.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

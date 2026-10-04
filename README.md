@@ -12,17 +12,35 @@ before it's reported as done. Claude doesn't self-certify.
 
 ## Quick start
 
+As a plugin — the repo is its own marketplace:
+
+```bash
+npm install -g @openai/codex && codex login
+claude plugin marketplace add ghafarallahi/SKILLS
+claude plugin install codex-skills@skills
+```
+
+Or by symlink, for a setup without plugin support:
+
 ```bash
 npm install -g @openai/codex && codex login
 git clone https://github.com/ghafarallahi/SKILLS.git ~/MyProject/SKILLS
 bash ~/MyProject/SKILLS/hooks/install.sh
 ```
 
-Restart Claude Code. From then on every turn that leaves changed files gets reviewed before
-it can be called done — a rejection is fed back for a fix, not shown to you as a suggestion.
+Use one of the two, not both: each wiring runs its own review, so both together review
+every turn twice. Restart Claude Code. From then on every turn that leaves changed files
+gets reviewed before it can be called done — a rejection is fed back for a fix, not shown
+to you as a suggestion.
+
+Either way, the self-test confirms it all works — 20 cases, offline:
 
 ```bash
-bash ~/MyProject/SKILLS/hooks/selftest.sh   # 20 cases, offline, confirms it all works
+bash ~/MyProject/SKILLS/hooks/selftest.sh                                  # symlink install
+```
+
+```bash
+bash ~/.claude/plugins/cache/skills/codex-skills/*/hooks/selftest.sh       # plugin install
 ```
 
 [`install.sh`](hooks/install.sh) is idempotent and non-destructive: it skips anything that
