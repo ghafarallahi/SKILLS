@@ -1,5 +1,76 @@
 # Changelog
 
+## v0.4.0
+
+Three new skills, a plugin install path, and a Stop-hook defect fix. Everything is
+additive; nothing you configured changes behavior.
+
+### Upgrade
+
+Symlink install:
+
+```bash
+cd ~/MyProject/SKILLS && git pull && bash hooks/install.sh
+```
+
+The installer links the three new skill directories; it changes nothing else. Or install
+as a plugin instead — the repo is now its own marketplace:
+
+```bash
+claude plugin marketplace add ghafarallahi/SKILLS
+claude plugin install codex-skills@skills
+```
+
+Use one of the two, not both: each wiring runs its own review, so both together review
+every turn twice. If you switch to the plugin, remove the symlinks and the two hook
+entries that `install.sh` added to `~/.claude/settings.json` (a backup is in
+`settings.json.bak`).
+
+### Added
+
+- **`minimal-code`** — write the least code that does the task: a solution order (no
+  code, reuse, stdlib, platform, installed dependency, minimum new code), size-review
+  tags, `ceiling:` markers for intentional limits with their upgrade condition, and a
+  rule that every failure path ends visibly. A rewrite of the third-party "ponytail"
+  idea without the persona, in this repo's controlled language.
+- **`verify-api`** — read an interface from the installed system before calling it: the
+  lock file, the installed declarations, or `--help`, never memory. Verified facts are
+  recorded with their version; the lock file is a fact's defining source.
+- **`design-decision`** — a structural choice (data model, library, protocol,
+  integration channel) gets a one-page written decision — alternatives, the deciding
+  constraint — surfaced before any code.
+- **Plugin packaging** — `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`,
+  and `hooks/hooks.json`. Hooks load from the plugin cache via `CLAUDE_PLUGIN_ROOT`
+  with no `settings.json` merge.
+
+### Changed
+
+- **`write-tests`** — two new sections: deterministic tests (false clock installed and
+  restored per test, wait on conditions not sleeps, seeded randomness, passes alone and
+  in the suite) and test placement against the build graph (a test file in a routes or
+  migrations directory becomes product code).
+- **`write-docs`** — a bulk rewrite is lossy until each output is compared against its
+  source.
+- **`manager` / `context-budget`** — the manager writes one context pack per project
+  (interfaces, conventions, verified baseline, traps) that workers read instead of
+  re-reading sources; packs carry commit provenance and staleness rules; workers may
+  `grep` a pack fact's defining source even in files they must not change.
+- **`codex-check`** — `codex exec` calls now redirect stdin (`</dev/null`) and carry a
+  timeout; without the redirect the call can hang indefinitely.
+
+### Fixed
+
+- **`codex-review.sh`** — a `cd` failure into the session's directory was swallowed, so
+  a vanished workspace made the hook review whatever directory it ran from. It now
+  exits silently when the workspace cannot be entered. Found by the new `minimal-code`
+  failure-path rules; the regression test was proven to fail against the old code.
+- **`relnotes.sh`** — six lines of blank-line trimming replaced by a one-line guard;
+  identical output, covered by the existing test.
+
+### Tests
+
+20 cases, up from 19. The new case proves a vanished workspace reviews nothing.
+
 ## v0.3.1
 
 The manager reports progress while it runs, and the repository checks its own README.
