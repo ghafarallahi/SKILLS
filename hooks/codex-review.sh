@@ -10,7 +10,9 @@ input=$(cat)
 j() { printf '%s' "$input" | jq -r "$1"; }
 
 cwd=$(j '.cwd // ""')
-[ -n "$cwd" ] && cd "$cwd" 2>/dev/null
+# A cwd we can't enter means there's no workspace to review — reviewing whatever
+# directory the hook happens to run from would judge the wrong files.
+[ -n "$cwd" ] && { cd "$cwd" 2>/dev/null || exit 0; }
 
 session=$(j '.session_id // "nosession"')
 state="${TMPDIR:-/tmp}/claude-codex-review"

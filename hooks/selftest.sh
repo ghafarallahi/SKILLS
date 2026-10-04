@@ -139,6 +139,23 @@ case_block_cap() {
   rm -rf "$t"
 }
 
+case_missing_cwd() {
+  local t
+  t=$(dirty_repo)
+  stub_codex "$t/bin" "CODEX_VERDICT: REJECT"
+  local out
+  # run from inside a dirty repo while naming a cwd that doesn't exist: the hook must
+  # review nothing, not fall through and review the directory it happens to be in
+  out=$(cd "$t/repo" && printf '{"cwd":"%s","session_id":"mc"}' "$t/nonexistent" |
+    TMPDIR="$t" PATH="$t/bin:$PATH" bash "$REVIEW" 2>/dev/null)
+  if [ -z "$out" ]; then
+    ok "a vanished cwd reviews nothing, not the wrong directory"
+  else
+    bad "a vanished cwd reviews nothing, not the wrong directory" "got: $out"
+  fi
+  rm -rf "$t"
+}
+
 case_record_edit() {
   local t
   t=$(mktemp -d)
@@ -441,6 +458,7 @@ case_reject
 case_clean_tree
 case_block_cap
 case_reset_rearms
+case_missing_cwd
 
 echo "no git"
 case_record_edit

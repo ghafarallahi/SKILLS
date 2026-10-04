@@ -79,6 +79,28 @@ Show the code first. Then report at most three lines: what you did not build, an
 condition to build it. Do not write prose that defends a simplification. Give a full
 explanation only when the user requests one.
 
+## 5a. Every failure path ends visibly
+
+Minimal code is not silent code. Each failure path ends in exactly one visible outcome:
+
+- Raise the error, or propagate it to the caller.
+- Return an explicit error value that the caller must handle.
+- Log the reason and continue, by a stated decision.
+
+These forms are forbidden:
+
+- An empty catch block.
+- A catch that returns a default value with no log.
+- A retry loop that exhausts its attempts and falls through to an implicit null. After
+  the last attempt, raise the last error, or return it through the function's declared
+  error type.
+- An exception converted silently into a value with the shape of success. A fallback
+  that is logged and documented is the third permitted outcome, not this form. The
+  difference is that the caller or the log can see that the failure happened.
+
+A violated internal assumption is a defect. Crash at once. Do not return a default value
+to continue.
+
 ## 6. The limits of this skill
 
 Never remove these items to make the code smaller:

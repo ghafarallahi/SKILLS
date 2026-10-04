@@ -22,7 +22,7 @@ Restart Claude Code. From then on every turn that leaves changed files gets revi
 it can be called done — a rejection is fed back for a fix, not shown to you as a suggestion.
 
 ```bash
-bash ~/MyProject/SKILLS/hooks/selftest.sh   # 19 cases, offline, confirms it all works
+bash ~/MyProject/SKILLS/hooks/selftest.sh   # 20 cases, offline, confirms it all works
 ```
 
 [`install.sh`](hooks/install.sh) is idempotent and non-destructive: it skips anything that
@@ -42,6 +42,8 @@ or not anyone remembers them:
 | [`skills/commit-message/SKILL.md`](skills/commit-message/SKILL.md) | Writes the message from the staged diff, not from intent — and never claims a test it didn't run. |
 | [`skills/review-changes/SKILL.md`](skills/review-changes/SKILL.md) | Reviews a diff by hand: severity-ranked, every finding refuted first, silence when it's clean. |
 | [`skills/write-tests/SKILL.md`](skills/write-tests/SKILL.md) | Tests proven to fail against the broken code first — otherwise they pass for the wrong reason. |
+| [`skills/verify-api/SKILL.md`](skills/verify-api/SKILL.md) | Read the interface from the installed system — lock file, declarations, `--help` — never from memory. |
+| [`skills/design-decision/SKILL.md`](skills/design-decision/SKILL.md) | Structural choices written down first: alternatives, the deciding constraint, surfaced before any code. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |
@@ -169,7 +171,7 @@ Requires `codex` (`npm install -g @openai/codex`), authenticated, plus `jq` and 
 bash hooks/selftest.sh
 ```
 
-Nineteen cases covering both hooks, the installer, `reset-count.sh`, `relnotes.sh`, and `check-readme.sh`. Every case stubs
+Twenty cases covering both hooks, the installer, `reset-count.sh`, `relnotes.sh`, and `check-readme.sh`. Every case stubs
 `codex` and gets its own `TMPDIR` and `HOME`, so the suite is deterministic, offline, and
 costs nothing. Non-zero exit if anything fails.
 
@@ -182,7 +184,7 @@ install
   ok   a skipped link fails loudly instead of reporting success
   ...
 
-19 passed, 0 failed
+20 passed, 0 failed
 ```
 
 ### By hand

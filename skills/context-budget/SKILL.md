@@ -93,7 +93,8 @@ strength of a digest fact, `grep` that fact at the source that defines it. The d
 source can be a dependency or a caller; a targeted `grep` there is not a repeated read.
 When the source changes, refresh the digest. A digest that nobody refreshes is wrong within a week. Organize at storage time, once;
 do not reorganize at each retrieval. A manager run writes a context pack for this reason
-(see [`manager`](../manager/SKILL.md)).
+(see [`manager`](../manager/SKILL.md)). A verified interface fact belongs in the
+project's facts file, with its version (see [`verify-api`](../verify-api/SKILL.md)).
 
 ## 6. Keep the facts, discard the data
 

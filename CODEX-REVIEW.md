@@ -133,6 +133,33 @@ Codex's cross-audit of the same files disputed the "nothing to cut": one `shrink
 Verified on edge cases, applied, suite green. Countable result: six logic lines removed,
 two markers added, one reviewer disagreement — which is the system working.
 
+## The reliability round
+
+Six additions from a three-survey research pass (repo failure audit, community skill
+collections, engineering literature), ranked by one rule: does it prevent a failure this
+repo actually hit? New skills: `verify-api` (interfaces read from the installed system,
+never memory — three repo-hit failures) and `design-decision` (the empty design slot in
+the lifecycle; every downstream skill passes on correctly-built wrong code). Extended:
+`write-tests` (deterministic tests; test placement against the build graph),
+`write-docs` (a bulk rewrite is lossy until compared), `minimal-code` (every failure
+path ends visibly). Declined with reasons: worktree isolation, tool-call budgets,
+parse-don't-validate, mutation testing, and five more — no repo-hit evidence, or already
+owned by an existing skill.
+
+Codex: round 1 NEEDS-WORK (three P2s — retry rule vs declared error types, logged
+fallback vs silent success, build checks unconditional); round 2 NEEDS-WORK (stored
+facts vs the check-at-the-defining-source rule); round 3 SOUND, after the lock file was
+defined as an interface fact's defining source.
+
+Field tests, same day: `verify-api` retrieved `dismissTo` from the installed
+expo-router 57.0.15 declarations and confirmed all three codex CLI flags the hook uses
+survive 0.156.1; the fact is recorded with its version in the project's facts file.
+`write-tests`' alone-and-in-suite rule held on a real suite (278 tests). The
+`minimal-code` failure-path audit of our own hooks found one real silent failure: a
+swallowed `cd` error let the Stop hook review whatever directory it ran from. The test
+was written first and failed against the unfixed hook; the fix is one guarded exit, by
+stated decision. Codex: APPROVE. Suite: 20 passed, 0 failed.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

@@ -76,6 +76,20 @@ When you review a diff, ask which sentence the diff made incorrect.
   one time. Use a link.
 - **Content for a product that does not exist.** Do not document a plan.
 
+## A rewrite is lossy until compared
+
+A transformation across many files — a style rewrite, a translation, a reformat, a
+codemod — loses content until you prove that it does not. The proof is a comparison:
+
+- Compare each output file against its source. Enumerate what was lost. Put it back.
+- An independent model can do the comparison for each file. A spot check of one file
+  proves one file.
+- For instructions and prose: list the instructions before, list them after, and match
+  the two lists.
+
+Do not report the rewrite as done before the comparison is done. A first pass of a
+controlled-language rewrite of this repository lost instructions in 12 of 13 files.
+
 ## Show, then explain
 
 Use real output, a real command, or a real file structure. Then write one sentence about

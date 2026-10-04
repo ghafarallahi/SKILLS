@@ -55,6 +55,34 @@ Tests that use the same state pass or fail with the sequence. You cannot use the
 Do the cleanup at the end of each test, not at the end of the suite. This includes the
 temporary state, the open handles, and each change that the test made outside itself.
 
+## Make each test deterministic
+
+A test that fails one time in ten is not a test. It is noise that trains you to ignore
+failures. The sources of a different result each run, and their corrections:
+
+- The clock. Code that reads the time gets a false clock. Install the false clock in the
+  setup of each test. Restore it in the teardown of the same test. A restore in a shared
+  place changes the clock mode of the other tests.
+- The wait. Do not synchronize with a sleep or a fixed timeout. Wait on the condition,
+  with a poll interval and an explicit limit. A sleep that is long enough today is too
+  short on a slow machine.
+- The random source. Seed it. After a failure, print the seed, so you can repeat the
+  failure.
+- The sequence. A new test must pass alone, and must pass inside the full suite. Run it
+  in both ways one time.
+
+## Put the test where the build cannot see it
+
+Some directories give a meaning to every file in them: routes, pages, migrations, an
+auto-registration glob. A test file in such a directory becomes product code, and the
+production build fails or changes.
+
+Before you create a test file, read two configurations where they exist: the test glob
+of the test runner, and the input globs of the build. Put the file where the first finds
+it and the second does not. After you add the file, run the production build one time,
+when the project has one. A project with no build and no discovery glob has no placement
+risk. There, follow the layout of the existing tests.
+
 ## Replace the external parts, not the subject
 
 Replace the parts that are slow, that cost money, that use the network, or that give a
