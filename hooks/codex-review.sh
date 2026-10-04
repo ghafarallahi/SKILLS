@@ -35,13 +35,16 @@ else
   done)
   [ -z "$files" ] && exit 0
   n=$(printf '%s\n' "$files" | wc -l | tr -d ' ')
+  # ceiling: 30 files in one review; the rest wait a turn. upgrade: several codex calls
+  # per hook run, when the queue rolls over often.
   printf '%s\n' "$files" | head -30 >"$f"
   what="This is not a git repository, so there is no diff — $f lists the files written this session (showing up to 30 of $n; any remainder is reviewed on the next turn). Read them and judge them as they stand."
   mode=files
 fi
 
 count=$(cat "$state/$session.count" 2>/dev/null || echo 0)
-# ponytail: 2 blocks per session max, then hand it back to the user rather than loop
+# ceiling: two blocks per session, then the hook steps aside. upgrade: make the cap a
+# setting, when a project needs more review rounds; reset-count.sh re-arms it today.
 [ "$count" -ge 2 ] 2>/dev/null && exit 0
 
 command -v codex >/dev/null 2>&1 || {

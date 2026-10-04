@@ -23,15 +23,12 @@ file=${2:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/CHANGELOG.md}
 
 # `^## ` does not match `### ...`, so a sub-heading inside the section is kept and the next
 # version heading ends it.
+# Leading blank lines: not printed until the first non-blank. Trailing blank lines:
+# printed, then stripped by the $() substitution.
 notes=$(awk -v V="## $version" '
   $0 == V { f = 1; next }
   f && /^## / { exit }
-  f { buf[++n] = $0 }
-  END {
-    s = 1; while (s <= n && buf[s] == "") s++
-    e = n; while (e >= s && buf[e] == "") e--
-    for (i = s; i <= e; i++) print buf[i]
-  }
+  f && ($0 != "" || started) { print; started = 1 }
 ' "$file")
 
 [ -n "$notes" ] || {

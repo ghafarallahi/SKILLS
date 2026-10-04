@@ -126,6 +126,13 @@ and an ambiguous "read each file" that contradicted `context-budget`. All five w
 restored or disambiguated. Round 2: SOUND, no new contradiction. The STE lesson held a
 second time: a rewrite loses content, and only a comparison against the source finds it.
 
+Field test (2026-10-03), on `hooks/` — 7 scripts, 776 lines. Claude's audit: nothing to
+cut, two intentional limits lacking proper markers (both now carry `ceiling:` comments).
+Codex's cross-audit of the same files disputed the "nothing to cut": one `shrink` in
+`relnotes.sh` — the awk trim buffer duplicated what `$()` substitution already does.
+Verified on edge cases, applied, suite green. Countable result: six logic lines removed,
+two markers added, one reviewer disagreement — which is the system working.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
