@@ -40,7 +40,8 @@ conversation contains, or permission to continue.
 
 ## 3. Do the steps to the end
 
-Do the steps in sequence. Do not stop to ask the user. Mark each step with `TaskUpdate`.
+Do the steps in sequence. Do not stop to ask the user. Keep a step list that the user
+can see, and mark each step when it is done.
 
 If an unexpected condition occurs, make the decision. Record the assumption. Continue.
 
