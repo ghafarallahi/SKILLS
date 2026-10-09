@@ -62,6 +62,7 @@ or not anyone remembers them:
 | [`skills/write-tests/SKILL.md`](skills/write-tests/SKILL.md) | Tests proven to fail against the broken code first — otherwise they pass for the wrong reason. |
 | [`skills/verify-api/SKILL.md`](skills/verify-api/SKILL.md) | Read the interface from the installed system — lock file, declarations, `--help` — never from memory. |
 | [`skills/design-decision/SKILL.md`](skills/design-decision/SKILL.md) | Structural choices written down first: alternatives, the deciding constraint, surfaced before any code. |
+| [`skills/offer-design/SKILL.md`](skills/offer-design/SKILL.md) | Hormozi's offer frameworks as honest checklists — marketing work only, every claim sourced, regulated registers win. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |

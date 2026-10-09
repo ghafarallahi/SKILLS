@@ -171,6 +171,21 @@ stale-on-foreground and a card outside the scroll container — and approved rou
 Worker tokens: ≈186K for the feature; the pack held and neither worker re-read sources
 the pack already carried.
 
+## The offer-design skill
+
+`offer-design` (added 2026-10-08) encodes Alex Hormozi's published offer and pitch
+frameworks as STE checklists — no persona, a scope guard that keeps it out of
+application copy and defers to a project's decision record in regulated registers, and
+an honesty rule: empirical claims need a measurement, business terms need the approving
+record, and missing proof is omitted, never invented. Codex round 1: NEEDS-WORK with
+eight findings, each cited against Hormozi's own published checklists — an invented
+lever ranking, a wrong strongest-guarantee claim, a narrowed naming formula, an
+unlabeled adaptation of the ad structure, "free" excluding low-cost magnets, an
+overbroad measurement rule, a trigger/body mismatch, and two over-long sentences.
+Round 2 caught the performance-guarantee definition still wrong. Round 3: SOUND. The
+pattern held again: an author's compression of someone else's framework drifts, and
+only a source-grounded comparison catches it.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
