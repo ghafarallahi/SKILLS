@@ -106,6 +106,13 @@ If you must disable a check to complete the work, write this in the pull request
 the reason and the condition that permits you to enable it again. A test that nobody
 disabled visibly is a test that all persons believe is running.
 
+## A result is valid only for unchanged inputs
+
+A saved result is evidence only while its inputs are unchanged. One edit after the run —
+to any file that the checks consume — makes the saved pass stale: it stays true for the
+earlier state, and it proves nothing about the current state. Run the checks again on
+the current state, and report the commit that they ran against.
+
 ## Report what you ran
 
 Give the command and the result line. Do not give a claim:

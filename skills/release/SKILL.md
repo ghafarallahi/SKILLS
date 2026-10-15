@@ -141,6 +141,11 @@ Do not stop when the deployment command stops.
 
 Say what you examined and how. "The release is complete" is not "the function operates".
 
+The proof of a deployment is the source identity. Read the deployed version or artifact
+digest from the production system, and compare it to the commit or digest that you
+released. A 200 response or a green health check shows that something runs. It does not
+show that your change runs.
+
 ## 10. After the release
 
 - Make the tag. Never move a tag and never publish a version number a second time.

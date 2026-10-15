@@ -186,6 +186,33 @@ Round 2 caught the performance-guarantee definition still wrong. Round 3: SOUND.
 pattern held again: an author's compression of someone else's framework drifts, and
 only a source-grounded comparison catches it.
 
+## The gstack round
+
+A six-agent audit read all 57 skills of garrytan/gstack (136K stars) against this
+system. Verdict: one adoption, five one-rule extensions, the rest skipped — most of
+gstack's surface is persona-heavy duplication of what the Stop hook and the 19 skills
+already enforce, and several mechanisms (composite health scores, scrape-by-default,
+per-skill telemetry) contradict this repo's rules outright. Adopted: `perf-baseline` —
+in-page metrics, median of three under fixed conditions, immutable baselines, relative
+thresholds, raw values only. Extended: `review-changes` (gate-integrity dispositions,
+sibling sweep), `codex-check` (reviewer preflight, data-not-instructions boundary),
+`root-cause` (stop rules), `ci-verify` (evidence staleness), `release` (deploy proof is
+the source identity), `target` (mechanical / taste / user-direction decisions).
+
+Codex: round 1 NEEDS-WORK, nine findings including a P1 — cached loads zero
+`transferSize` and hide bundle growth; round 2 caught two residuals (cross-origin
+hidden sizes, an overclaimed repair); round 3 SOUND. During round 1 the reviewer itself
+failed — the Codex default model moved to one the account cannot use — and the
+just-written preflight rule diagnosed and repaired it (CLI 0.156.1 → 0.163.0) within
+minutes of existing.
+
+Field test, same day: three warm-cache runs of a real page through the browser pane.
+The skill's failure rules fired correctly — the cold run was excluded as
+non-comparable, cached resources forced the recorded `decodedBodySize` fallback, two
+cross-origin resources were counted as hidden, and the absent first-contentful-paint
+was recorded as a failed metric instead of passed over. A measurement system is tested
+by what it refuses to claim.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

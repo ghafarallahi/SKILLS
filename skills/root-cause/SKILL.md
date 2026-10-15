@@ -82,6 +82,17 @@ rebuild, a retry, or an unrelated edit, the defect moved. It did not go away.
   [`write-tests`](../write-tests/SKILL.md).
 - Give the mechanism in one sentence: the fault, and how it caused the symptom.
 
+## Stop rules
+
+- After three failed hypotheses, stop. Question the level above the line: the design,
+  the dependency, or your model of the system.
+- After two reverted correction attempts, stop and report what you know.
+- When a correction touches more than five files, pause and report it to the user. A
+  correction of that width often means the cause sits in the design, and that decision
+  belongs to the user.
+- Commit the correction and its regression test together, in one commit. A fix that
+  lands without its test is unprotected.
+
 ## When you cannot find the cause
 
 Write down each assumption of your theory. Then examine the assumption that you are most

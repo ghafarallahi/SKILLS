@@ -28,6 +28,18 @@ For each changed function, answer these questions:
 - Which values does the caller send?
 - What does the caller do with the result?
 
+## 2a. Examine the gates that the diff touches
+
+A diff can weaken the checks that guard it. Find each hunk that changes a test, a
+snapshot, a CI configuration, or a lint rule. For each one, state a disposition: the
+change is correct and stays, or the gate must be restored. Never pass such a hunk in
+silence. A weakened test makes every later green run false. The dispositions go into
+the report even when the diff is otherwise correct: one compact line covers all the
+correct gate changes together.
+
+When you confirm a defect, search for its pattern outside the diff: `grep` the sibling
+call sites. Rate the severity on the worst sibling, not on the one hunk in front of you.
+
 ## 3. Put the findings in order of cost
 
 Report the findings in this sequence. Give your attention in the same sequence.

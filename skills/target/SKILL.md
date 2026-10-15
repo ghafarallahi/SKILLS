@@ -44,6 +44,15 @@ Do the steps in sequence. Do not stop to ask the user. Keep a step list that the
 can see, and mark each step when it is done.
 
 If an unexpected condition occurs, make the decision. Record the assumption. Continue.
+Classify each decision first:
+
+- **Mechanical** — one correct answer exists: a path, a name, a version. Decide without
+  a report line; the record-the-assumption rule above still applies when you assumed.
+- **Taste** — more than one defensible answer: a layout, a wording, a structure.
+  Decide, continue, and list the decision in the report, with its reason.
+- **A change of the user's stated direction** — the user said X, and the work now
+  points away from X. Never decide this alone, even when the evidence agrees with you.
+  Do X and record the concern, or stop and ask.
 
 If a step is blocked, do all the other steps first. Then report the blocked step. Do not
 stop the full task for one step.
