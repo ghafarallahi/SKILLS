@@ -213,6 +213,21 @@ cross-origin resources were counted as hidden, and the absent first-contentful-p
 was recorded as a failed metric instead of passed over. A measurement system is tested
 by what it refuses to claim.
 
+## The store-submit skill
+
+`store-submit` (added 2026-10-26) takes an app to the App Store and Google Play on one
+principle: the agent prepares, the account holder decides. Two web researchers grounded
+it in the current official pages; every volatile fact carries its read date and defers
+to the linked page. Maximum automation runs through the official APIs only — EAS
+builds and submissions, `eas metadata:push` for listings, the Play Edits API — with
+credentials held encrypted and an end state where the user checks a populated console
+and presses submit. Codex round 1: NEEDS-WORK with eight findings, four P1 — the
+automation as first written could push binding questionnaire answers, start a review
+or rollout, accept an unencrypted credential file, and leak demo credentials into
+tracked metadata; plus a false API ceiling (Data safety has one) and a misattributed
+validation claim. All eight fixed; round 2: SOUND. The lesson of the round: in an
+automation skill, the dangerous defects are not wrong facts but missing boundaries.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

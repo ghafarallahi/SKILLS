@@ -64,6 +64,7 @@ or not anyone remembers them:
 | [`skills/design-decision/SKILL.md`](skills/design-decision/SKILL.md) | Structural choices written down first: alternatives, the deciding constraint, surfaced before any code. |
 | [`skills/offer-design/SKILL.md`](skills/offer-design/SKILL.md) | Hormozi's offer frameworks as honest checklists — marketing work only, every claim sourced, regulated registers win. |
 | [`skills/perf-baseline/SKILL.md`](skills/perf-baseline/SKILL.md) | Page performance measured in a real browser: median of three, immutable baseline, relative thresholds, raw values only. |
+| [`skills/store-submit/SKILL.md`](skills/store-submit/SKILL.md) | App Store and Google Play, agent-prepares / user-decides: builds, listings, derived privacy declarations, dated volatile facts. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |
