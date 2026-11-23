@@ -1,5 +1,69 @@
 # Changelog
 
+## v0.5.0
+
+Three new skills — marketing offers, page performance, store submission — and six
+existing skills hardened from audits of garrytan/gstack and Google's Elephant-Goldfish
+Model. Everything is additive; nothing you configured changes behavior.
+
+### Upgrade
+
+Plugin install:
+
+```bash
+claude plugin update codex-skills@skills
+```
+
+Symlink install:
+
+```bash
+cd ~/MyProject/SKILLS && git pull && bash hooks/install.sh
+```
+
+The installer links the three new skill directories; it changes nothing else.
+
+### Added
+
+- **`offer-design`** — Alex Hormozi's offer and pitch frameworks as honest checklists:
+  the value equation, the offer stack, pitch structures, lead magnets. Marketing work
+  only; a project's decision record overrides the register, and every claim must be
+  sourceable — missing proof is omitted, never invented.
+- **`perf-baseline`** — page performance measured inside a real browser: median of
+  three runs under fixed recorded conditions, immutable dated baselines, relative
+  regression thresholds (50% + 500 ms timing, 25% bundle), raw values only. Cached and
+  cross-origin resources are handled explicitly.
+- **`store-submit`** — App Store and Google Play on one principle: the agent prepares,
+  the account holder decides. Builds and listings automated through the official APIs
+  with encrypted credentials; profiles that can never start a review or rollout;
+  every binding act (accounts, fees, agreements, questionnaire confirmations, the
+  final submit) marked [user]. Volatile store facts carry their read date and defer
+  to the linked official pages.
+
+### Changed
+
+- **`codex-check`** — a reviewer preflight (version compared to the newest published;
+  access faults reported as reviewer-unavailable, never read as verdicts), a
+  data-not-instructions boundary line in every review prompt, and a new rule: each
+  review after a rejection reads fresh — the reviewer gets the artifact and the first
+  round's findings, never the author's claims about the corrections.
+- **`review-changes`** — hunks that weaken a test, snapshot, CI config, or lint rule
+  get an explicit disposition; confirmed defects are searched at sibling call sites.
+- **`root-cause`** — stop rules: three failed hypotheses, two reverts, or a five-file
+  correction each stop the loop; a fix commits together with its regression test.
+- **`ci-verify`** — a saved pass is stale after any edit to the files the checks
+  consume.
+- **`release`** — deploy proof is the version or artifact digest, never a 200; and
+  decision records are compared with the shipped source before a release.
+- **`target`** — decisions classify as mechanical, taste, or a change of the user's
+  stated direction; the third is never decided silently. The step list no longer
+  names a harness tool that may not exist.
+- **`design-decision`** — the paraphrase test: a reader with no session context
+  paraphrases the decision page before the user sees it.
+
+### Tests
+
+20 cases, unchanged. The plugin manifest now says 21 skills and v0.5.0.
+
 ## v0.4.0
 
 Three new skills, a plugin install path, and a Stop-hook defect fix. Everything is
