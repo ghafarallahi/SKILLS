@@ -247,6 +247,22 @@ contradiction and no ambiguity, and offered two formatting nits (bullet-listing
 two-item inline alternatives) that the repo's own practice keeps as prose; both are
 declined with that reason, matching the two-blocks-then-step-aside design of the hook.
 
+## The store-submit field test
+
+`store-submit` ran its agent half on the real Foobia app (2026-11-23). The skill's
+checks found real defects before any store did: three template purpose strings for APIs
+the app never uses — which Viro's config plugin silently re-injects, so the fix is a
+local plugin verified on the generated Info.plist; a listing name four characters over
+both stores' cap; a "no data collected" plan that ARCore's documented collection
+contradicts; "nothing leaves the phone" claims that OS backups and ARCore made false in
+the shipped legal screen; and a non-AR promise the session code does not keep. Six
+fresh-handed review rounds (per the goldfish rule) drove the loop; the reviewer
+escalated from config to resolved-config to generated-plist verification, and round six
+returned APPROVE. Foobia commit 4bd0581. The [user] gap list — URLs, enrollment,
+account type, credentials, device test, the prominent in-app ARCore notice — is in the
+project's STORE-SUBMISSION.md. The lesson: a store-prep skill earns its place by what
+it refuses to declare.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
