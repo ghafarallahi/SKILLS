@@ -69,6 +69,15 @@ and the review never finishes. Set a timeout on the call.
    - **An error, or Codex is not installed** — say "codex unavailable: <error>. The work is
      unverified." Do not say that a review confirmed the work.
 
+## Each review after a rejection reads fresh
+
+After a rejection, correct the faults. Then get a new review. Do not tell that review
+what you corrected. A prompt that lists the fixes and requests confirmation points the
+reviewer to the verdict that you want. Give the reviewer the artifact, the file names,
+and the same quality question as the first round. The reviewer can read the
+first round's findings, as the first round wrote them. The reviewer must not read your
+claims about the corrections.
+
 ## Rules
 
 - Do not report success after a REJECT.

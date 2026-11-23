@@ -228,6 +228,25 @@ tracked metadata; plus a false API ceiling (Data safety has one) and a misattrib
 validation claim. All eight fixed; round 2: SOUND. The lesson of the round: in an
 automation skill, the dangerous defects are not wrong facts but missing boundaries.
 
+## The goldfish round
+
+Three rules adapted from Google's Elephant-Goldfish Model (Apache-2.0), after reading
+its repo: `codex-check` — each review after a rejection reads fresh, with the artifact,
+the first round's findings as written, and never the author's claims about the
+corrections; `design-decision` — the paraphrase test, where a reader with no session
+context paraphrases the decision page before the user sees it; `release` — decision
+records compared with the shipped source. Declined from EGM: installing the plugin
+itself (persona-styled, same-vendor reviewers, overlaps three of our skills) and its
+ten-reviewer roster.
+
+The loop itself proved the first rule. Rounds two to four ran fresh — files, prior
+findings, the same question, no fix list — and the fresh rounds kept finding what
+primed rounds had passed: modal verbs, metaphors, and a 21-word sentence from round one
+that a "confirm the fixes" prompt would have waved through. Round four found no
+contradiction and no ambiguity, and offered two formatting nits (bullet-listing
+two-item inline alternatives) that the repo's own practice keeps as prose; both are
+declined with that reason, matching the two-blocks-then-step-aside design of the hook.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

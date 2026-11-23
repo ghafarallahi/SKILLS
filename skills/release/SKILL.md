@@ -26,6 +26,10 @@ configuration value, a new version of a dependency, and each change to the authe
 to a payment. If a change is unexpected, stop and read it. A release is a bad time to see a
 change for the first time.
 
+Compare the project's decision records and design documents with the source that the
+release ships. When a document's claim and the code disagree, correct the document or
+the code before the release.
+
 ## 2. Select the version number correctly
 
 A version number is a statement about compatibility. Select it from the diff:

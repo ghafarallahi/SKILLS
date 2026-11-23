@@ -51,6 +51,14 @@ One page or less, before the code:
   not a constraint.
 - The selected path, and the first thing that breaks it.
 
+## 4a. The paraphrase gate
+
+Before you show the decision to the user, do the paraphrase test. Give the page to a
+reader with no session context: a subagent, or an independent model. The reader
+paraphrases the decision in its own words. When the reader cannot paraphrase a section,
+that section is not ready. This failure occurs when each term has a definition and the
+parts still do not connect. Rewrite the section until the paraphrase succeeds.
+
 ## 5. Surface it, then wait
 
 Show the decision to the user before you code. Wait for agreement, unless the user gave
