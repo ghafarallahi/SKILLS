@@ -263,6 +263,27 @@ account type, credentials, device test, the prominent in-app ARCore notice — i
 project's STORE-SUBMISSION.md. The lesson: a store-prep skill earns its place by what
 it refuses to declare.
 
+## The skill-gate skill
+
+`skill-gate` (added 2026-11-24, at the user's direction: "don't add anything lower
+than our ability") turns the set's recorded practice into law: an addition must beat
+the current system on a named axis with evidence, decline is the default, third-party
+material is rewritten and never imported, nothing counts before a SOUND review plus a
+recorded field test, the standard only increases, and the user's stated working style
+overrides popularity. Codex: four rounds to SOUND — round 1 caught a rule that would
+have rejected the extensions the set itself prefers, an unnamed re-audit trigger, and
+style faults; rounds 2–4 ran fresh and polished the rest.
+
+Field test, same day, on a live candidate: the aitmpl.com "Brainstorming" skill
+(obra/superpowers adaptation, 11.8K downloads). The gate's verdict: DECLINED — it
+prevents no failure this system met (its alternatives-first design page, approval
+gate, and builder check are `design-decision` plus the paraphrase gate already here);
+it is weaker on the only new axis it offers; and its one-question-per-message
+interview contradicts the user's stated ask-once-run-to-end style, which section 5
+names as a decline reason on its own. Download count noted and given no weight. The
+decline matches the decision the user made before the gate existed, now with the
+reasons on record.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

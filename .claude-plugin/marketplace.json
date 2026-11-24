@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "codex-skills",
-      "description": "21 coding skills plus an enforcing Stop hook: Codex reviews every turn that leaves changed files.",
+      "description": "22 coding skills plus an enforcing Stop hook: Codex reviews every turn that leaves changed files.",
       "source": "./",
       "category": "productivity"
     }
