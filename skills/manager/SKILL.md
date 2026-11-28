@@ -87,6 +87,11 @@ time; workers read the digest. Put it in one file at the root of the project, fo
 - The file rules: which directories have special meaning, and where each kind of file goes.
 - The traps found during the baseline: API versions, mocks, paths.
 - The file ownership map: which task owns which files.
+- The review focus: up to five input classes, likely to break, that the spec does not
+  mention. When the spec does not state an input's behavior, decide the correct
+  behavior - an explicit error is often correct - and record it. Do not invent a
+  feature to support the input. Write one test for each class, and give the test to the
+  task that owns the code.
 
 A worker reads the pack, then reads the files that it must change. It may also `grep` a
 file that it must not change, to verify a pack fact (see the rules below). It does not

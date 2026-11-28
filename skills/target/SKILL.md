@@ -49,7 +49,8 @@ Classify each decision first:
 - **Mechanical** — one correct answer exists: a path, a name, a version. Decide without
   a report line; the record-the-assumption rule above still applies when you assumed.
 - **Taste** — more than one defensible answer: a layout, a wording, a structure.
-  Decide, continue, and list the decision in the report, with its reason.
+  Decide, continue, and list the decision in the report, with its reason and the cost
+  if it is wrong. The cost lets the user audit the expensive decisions first.
 - **A change of the user's stated direction** — the user said X, and the work now
   points away from X. Never decide this alone, even when the evidence agrees with you.
   Do X and record the concern, or stop and ask.

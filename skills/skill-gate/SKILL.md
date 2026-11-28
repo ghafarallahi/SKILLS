@@ -57,6 +57,26 @@ A new or changed skill is a draft until you complete all of these:
 - Remove a rule or a skill that no longer gives value. Such a deletion is an
   improvement, and it passes the same review as an addition.
 
+## 4a. Match the form of a rule to the failure it prevents
+
+When you write a new rule, choose its form by the failure type. Two types:
+
+- A failure of output shape: too long, the wrong tone, an unwanted section. Write a
+  positive recipe or a contract that states the shape you want. The superpowers
+  `writing-skills` skill reports a test where a prohibition did worse than no guidance
+  on this kind of failure. Make the positive form the default. Test the wording when
+  the shape matters.
+- A failure of discipline or correctness: a skipped step, a missing check, an unsafe
+  operation. A prohibition is correct, because the agent must not do the thing.
+
+Some existing skills state a presentation rule as a short prohibition that works.
+Minimal-code on defensive prose and commit-message on a final full stop are examples.
+Keep those. This rule guides a new rule; it does not require a rewrite of a working
+one.
+
+Use an absolute word (`never`, `must`, `always`) only for the one rule that most needs
+it. When every rule is absolute, the reader cannot tell which one is the strongest.
+
 ## 5. The user's direction wins
 
 Decline a candidate that contradicts the user's stated working style, and name the

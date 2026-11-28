@@ -313,6 +313,34 @@ failure direction on purpose" rule sanctions over a Stop hook that could wedge a
 session. The field test changed no code because the subject already complied - a valid
 result.
 
+## The superpowers round
+
+A three-agent audit read all 15 skills of obra/superpowers (MIT, 328K stars), the
+prominent upstream whose Brainstorming this project already assessed as equal to
+`design-decision`. The gate's verdict: 0 adopt, 3 adapt, 11 skip. No skill cleared the
+admission bar, which is the honest result for a peer upstream: the set already owns
+superpowers' process discipline - test-driven, root-cause-first, evidence-before-done,
+parallel delegation, decision-first - usually sharper, because ours are domain-specific
+and hook-enforced where theirs are prose iron-laws.
+
+Folded: `skill-gate` gained section 4a (match a rule's form to the failure - a positive
+recipe for an output-shape failure, where superpowers measured a prohibition doing
+worse than no guidance; a prohibition for a discipline failure); `target` gained a
+"cost if wrong" clause on each taste decision, so the user audits the expensive calls
+first; `manager`'s context pack gained a "review focus" - up to five spec-silent input
+classes, each with its decided behavior and a test. Declined as folds: a
+compaction-recovery ledger (manager already keeps a record), and anti-sycophancy as a
+rule (house style already suppresses it).
+
+Codex: four fresh rounds to SOUND. Round 1 caught the important one: 4a first overstated
+superpowers' measured claim as a universal law and gave an unproven cause; later rounds
+narrowed it to superpowers' attributed finding, and reconciled it with the presentation
+prohibitions that minimal-code and commit-message already carry. Noted on record, not
+adopted: superpowers' empirical skill-authoring method - run the scenario without the
+skill to capture the failure, then A/B the wording against a no-guidance control - is a
+real axis where they lead this set's review-plus-field-test validation. It is where
+skill-gate grows next if one authoring section proves too thin.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its
