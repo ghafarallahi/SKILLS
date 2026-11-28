@@ -78,6 +78,20 @@ and the same quality question as the first round. The reviewer can read the
 first round's findings, as the first round wrote them. The reviewer must not read your
 claims about the corrections.
 
+## Triage a REJECT before you act on it
+
+A second model can reject for a reason that does not hold. Before you correct a
+rejected finding, test it. For a finding with a deterministic trigger, write the test
+that fails if the defect is real. Set its preconditions, and show it can fail by first
+running it against the defect. A pass then disproves the finding: record the disproof,
+and do not correct it. For a race, a timing fault, or a load-dependent fault, a passing
+test shows only that this run missed the interleaving. Mark it inconclusive and keep
+it, as [review-changes](../review-changes/SKILL.md) keeps a mechanism-supported
+finding. Rate each surviving finding by impact and by likelihood together. A rare
+trigger with no serious impact is Low. A rare trigger is not Low when it loses data,
+exposes a credential, bypasses authorization, or deadlocks a shared service. Correct
+the findings that reproduce, and the findings that rate high on impact.
+
 ## Rules
 
 - Do not report success after a REJECT.

@@ -93,6 +93,15 @@ Never replace the code that you test. A test of a replacement tests the replacem
 Use a real temporary file, not a simulated file system. Use a real subprocess. A test that
 is nearer to production has more value.
 
+## Two assertions that pass for the wrong reason
+
+- A test that passes when the subject is absent tests nothing. A fallback value, a
+  caught-and-ignored error, or a skipped setup can make a test green with no subject
+  present. Assert that the subject ran.
+- Assert the whole condition, not one substring of it. A pin on a substring survives a
+  mutation that disables the branch, for example `if (false && ready)`. Assert both
+  that the code runs the branch and that it skips the branch.
+
 ## Use the tools of the project
 
 Use the tools that the project uses: the test framework, the assertions, the fixtures, and

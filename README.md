@@ -66,6 +66,7 @@ or not anyone remembers them:
 | [`skills/perf-baseline/SKILL.md`](skills/perf-baseline/SKILL.md) | Page performance measured in a real browser: median of three, immutable baseline, relative thresholds, raw values only. |
 | [`skills/store-submit/SKILL.md`](skills/store-submit/SKILL.md) | App Store and Google Play, agent-prepares / user-decides: builds, listings, derived privacy declarations, dated volatile facts. |
 | [`skills/skill-gate/SKILL.md`](skills/skill-gate/SKILL.md) | How this set grows: beat the system on a named axis with evidence, distill never import, prove before it counts. |
+| [`skills/guardrail-hooks/SKILL.md`](skills/guardrail-hooks/SKILL.md) | Turn a rule the agent keeps breaking into code: the smallest code path, gated only where worth a click, tested like a program. |
 | [`skills/root-cause/SKILL.md`](skills/root-cause/SKILL.md) | Debugging: reproduce, halve the space, observe values, fix where the callers converge. |
 | [`skills/refactor/SKILL.md`](skills/refactor/SKILL.md) | Structure changes that provably don't change behavior — green in between every step. |
 | [`skills/code-comments/SKILL.md`](skills/code-comments/SKILL.md) | Comments that carry what code can't: why, invariants, domain rules — and stay true as it changes. |

@@ -55,6 +55,14 @@ Report the findings in this sequence. Give your attention in the same sequence.
    correct.
 5. **Absent tests** for logic that can fail with no message.
 
+Two probes that a reviewer misses at a glance; run them on each change:
+
+- **Authority reconciliation.** An authority (a server, a validator, a store) returned
+  a value, and the code still acts on the requested value. Example: a quota check
+  returns "denied" and the code uses the requested amount anyway.
+- **Identity correlation.** The code joins two results by a key that is not stable
+  under concurrent use, so a second request binds the wrong pair.
+
 ## 4. Verify a finding before you report it
 
 For each possible finding, try to show that it is incorrect. Make the failure case: these

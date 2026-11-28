@@ -31,6 +31,14 @@ with the time to the result and with the effort the customer must give. The four
 Hormozi gives the most weight to the two dividers: a faster and easier path raises
 perceived value more than a larger promise does.
 
+## 2a. Name the substitute first
+
+An offer competes with what the customer uses today, not with nothing. Before you build
+the offer, name that substitute - the current tool, the manual workaround, or doing
+nothing - and name why the offer beats it. An offer written against a real substitute
+is concrete. An offer written as if the customer had no current option describes a
+benefit the customer already gets elsewhere.
+
 ## 3. Build the offer stack
 
 1. List each problem the customer meets on the path to the outcome.

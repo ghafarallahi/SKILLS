@@ -284,6 +284,35 @@ names as a decline reason on its own. Download count noted and given no weight. 
 decline matches the decision the user made before the gate existed, now with the
 reasons on record.
 
+## The product-engineering round
+
+A five-agent audit read all 38 skills of phuryn/product-engineering (MIT, shipped from
+three live products), the closest peer system to this one: same
+decide/build/independent-review/release spine, its own rejected.md. The gate's verdict:
+24 skipped (vendor-locked backends, GTM consulting needing customer interviews,
+Windows, UI already covered), 12 converge, and the real surplus is one adopt and five
+folds. `work-humanizer` was declined as the second adopt - a prose utility below the
+engineering bar, and the session already carries social humanizer skills.
+
+Adopted: `guardrail-hooks` - how to author an enforced guard, the one clear gap in a
+system that runs enforced hooks and whose CLAUDE.md demands memory-rules become code;
+distilled to the decision table and the writing discipline, the vendored scripts left
+behind. Folded: `codex-check` (triage a REJECT - disprove a deterministic finding by a
+sensitive test, keep a race inconclusive, rate by impact and likelihood),
+`review-changes` (authority-reconciliation and identity-correlation probes),
+`write-tests` (two assertion anti-patterns), `release` (a live-response marker probe
+for store and CDN builds with no readable digest), `offer-design` (name the substitute
+first).
+
+Codex: six fresh rounds to SOUND. Round 1 caught a P1 in my triage fold - a passing
+test cannot disprove a race, and the rule contradicted review-changes; later rounds
+tightened severity, hook caveats, the no-marker release case, and the house style.
+Field test: the skill's own checklist applied to this repo's two hooks. They pass it,
+including `codex-review.sh`'s deliberate fail-open, which the skill's "decide the
+failure direction on purpose" rule sanctions over a Stop hook that could wedge a
+session. The field test changed no code because the subject already complied - a valid
+result.
+
 ## The rewrite into Simplified Technical English
 
 All 14 skill files were rewritten in ASD-STE100. Codex compared each file against its

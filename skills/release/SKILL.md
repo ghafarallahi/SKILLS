@@ -150,6 +150,13 @@ digest from the production system, and compare it to the commit or digest that y
 released. A 200 response or a green health check shows that something runs. It does not
 show that your change runs.
 
+When no digest or version is readable - a store build, static hosting, a CDN - look for
+a distinguishing marker. A string the release added, or one it removed, each tells the
+builds apart. Probe the live response for whichever markers exist. The added string
+present, and the removed string gone, is evidence that the new build serves. When the
+release changed no visible marker, you cannot confirm the serving build this way.
+Report the deployment identity as unverified.
+
 ## 10. After the release
 
 - Make the tag. Never move a tag and never publish a version number a second time.
